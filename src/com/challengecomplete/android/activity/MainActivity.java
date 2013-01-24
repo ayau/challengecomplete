@@ -1,4 +1,4 @@
-package com.challengecomplete.android;
+package com.challengecomplete.android.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -8,6 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.challengecomplete.android.R;
+import com.challengecomplete.android.R.id;
+import com.challengecomplete.android.R.layout;
+import com.challengecomplete.android.R.menu;
 import com.challengecomplete.android.fragment.MainFragment;
 import com.challengecomplete.android.fragment.SideFragment;
 import com.challengecomplete.android.service.ServiceHelper;
