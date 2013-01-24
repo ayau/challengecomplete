@@ -1,5 +1,6 @@
 package com.challengecomplete.android.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -142,9 +143,11 @@ public class ScrollView extends HorizontalScrollView{
 	
 	public void close(){
 		smoothScrollTo(closedX, 0);
+		((Activity) this.getContext()).getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 	
 	public void open(){
 		smoothScrollTo(openedX, 0);
+		((Activity) this.getContext()).getActionBar().setDisplayHomeAsUpEnabled(false);
 	}
 }
