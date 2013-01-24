@@ -44,7 +44,7 @@ public class ScrollView extends HorizontalScrollView{
 		viewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener(){
 			@Override
 			public void onGlobalLayout() {
-				ScrollView.this.scrollTo(width*2/3, 0);
+				ScrollView.this.scrollTo(width*5/6, 0);
 			}
 		});
 		
@@ -58,7 +58,7 @@ public class ScrollView extends HorizontalScrollView{
 		this.width = width;
 		this.height = height;
 		openedX = 0;
-		closedX = width*2/3;
+		closedX = width*5/6;
 		
 		setMeasuredDimension(width, height);		
 		
