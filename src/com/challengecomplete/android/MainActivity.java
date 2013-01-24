@@ -3,12 +3,14 @@ package com.challengecomplete.android;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.challengecomplete.android.fragment.MainFragment;
 import com.challengecomplete.android.fragment.SideFragment;
+import com.challengecomplete.android.service.ServiceHelper;
 import com.challengecomplete.android.view.ScrollView;
 
 public class MainActivity extends FragmentActivity {
@@ -37,7 +39,17 @@ public class MainActivity extends FragmentActivity {
         // Initializing home button
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+        
+        fetch();
     }
+    
+    // temporary
+    public void fetch(){
+		// Update tasks
+        ServiceHelper mServiceHelper = ServiceHelper.getInstance();
+    	int taskId = mServiceHelper.startService(this, ServiceHelper.GET_ME);
+    	Log.i(TAG, "TaskId: " + taskId);
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

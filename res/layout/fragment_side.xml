@@ -2,7 +2,7 @@
 <com.challengecomplete.android.view.SidePanel xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#000000" >
+    android:background="#F0F0F0" >
 
     <ListView
         android:id="@android:id/list"
