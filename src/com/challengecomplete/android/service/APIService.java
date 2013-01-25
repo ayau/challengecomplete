@@ -1,7 +1,11 @@
 package com.challengecomplete.android.service;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.challengecomplete.android.utils.ChallengeComplete;
+
 import android.app.IntentService;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.util.Log;
 
@@ -28,11 +32,43 @@ public class APIService extends IntentService {
 		int action = intent.getIntExtra(ServiceHelper.ACTION, 0);
 		int taskId = intent.getIntExtra(ServiceHelper.TASK_ID, 0);
 		
+		String results;
+		
 		switch (action) {
 		
+		case ServiceHelper.LOGIN:
+			Log.i(TAG, "LOGIN");
+			
+			if(!intent.hasExtra("ftoken") || !intent.hasExtra("fid"))
+				return;
+			
+			String token = intent.getStringExtra("ftoken");
+			String fid = intent.getStringExtra("fid");
+			
+			results = HttpCaller.getRequest(this, "/login?ftoken=" + token + "&fid=" + fid);
+			
+			// This part only temporary. Should be done in receiver
+			if (results != null){
+				try {
+					JSONObject jObject = new JSONObject(results);
+					String mToken = jObject.getString("token");
+					Log.i(TAG, mToken);
+					ChallengeComplete.setLoggedIn(this);
+					ChallengeComplete.setToken(this, mToken);
+					Log.i(TAG, "Logged in");
+					return;
+				} catch (JSONException e){
+					
+				}
+			}
+			
+//			ServiceHelper mServiceHelper = ServiceHelper.getInstance();
+//			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId);
+			
+			break;
 		case ServiceHelper.GET_ME:
 			Log.i(TAG, "GET ME");
-			String results = HttpCaller.getRequest("/me");
+			results = HttpCaller.getRequest(this, "/me");
 			
 			if (results != null)
 				Log.i(TAG, results);

@@ -31,6 +31,7 @@ public class ServiceHelper{
 //	public static final String STATUS_OK = "ok";
 	
 	// Operations available
+	public static final int LOGIN = 0x00;
 	public static final int GET_ME = 0x01;
 	
 	private static ServiceHelper instance;
@@ -81,7 +82,7 @@ public class ServiceHelper{
 	}
 	
 	/**
-	 * Receives callback from ArkouService. Prepares callback to UI thread.
+	 * Receives callback from APIService. Prepares callback to UI thread.
 	 * @param resultCode - Success or Error
 	 * @param taskIdentifier - Unique identifier for an operation. ie GET_TASK, id = 3
 	 */

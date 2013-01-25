@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
@@ -13,17 +12,30 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Context;
+
+import com.challengecomplete.android.utils.ChallengeComplete;
+
 public class HttpCaller {
 	private static final String TAG ="HttpCaller";
-	// local host
-	public static final String HOST = "http://192.168.1.144:3000/api";
+	
+	public static final String HOST = "http://158.130.237.124:3000/api";
+//	public static final String HOST = "http://192.168.1.144:3000/api";
 //	public static final String HOST ="http://mygoalthisyear.herokuapp.com/api";
 	
-	public static String getRequest(String path) {
+	public static String getRequest(Context context, String path) {
 		HttpClient httpclient = new DefaultHttpClient();
-
+		
+		String url = HOST + path;
+				
+		String token = ChallengeComplete.getToken(context);
+		if (token != null) {
+			// Switch to namevaluepair later
+			url += "?token=" + token;
+		}
+		
 		// Prepare a request object
-		HttpGet httpget = new HttpGet(HOST + path);
+		HttpGet httpget = new HttpGet(url);
 
 		// Execute the request
 		HttpResponse response;

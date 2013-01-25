@@ -1,5 +1,6 @@
 package com.challengecomplete.android.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -9,13 +10,16 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.challengecomplete.android.R;
-import com.challengecomplete.android.R.id;
-import com.challengecomplete.android.R.layout;
-import com.challengecomplete.android.R.menu;
 import com.challengecomplete.android.fragment.MainFragment;
 import com.challengecomplete.android.fragment.SideFragment;
 import com.challengecomplete.android.service.ServiceHelper;
+import com.challengecomplete.android.utils.ChallengeComplete;
 import com.challengecomplete.android.view.ScrollView;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
 
 public class MainActivity extends FragmentActivity {
 	private static final String TAG = "MainActivity";
@@ -44,7 +48,14 @@ public class MainActivity extends FragmentActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
         
-        fetch();
+        // If user is not logged in
+        if (!ChallengeComplete.isLoggedIn(this)){
+        	Intent intent = new Intent(this, LoginActivity.class);
+        	startActivity(intent);
+        }
+//        login();
+        
+//        fetch();
     }
     
     // temporary
