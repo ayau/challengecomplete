@@ -1,9 +1,13 @@
 package com.challengecomplete.android.service;
 
+import java.util.HashMap;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.util.Log;
+import android.util.SparseArray;
 
 /**
  * A singleton class that:
@@ -34,9 +38,13 @@ public class ServiceHelper{
 	public static final int LOGIN = 0x00;
 	public static final int GET_ME = 0x01;
 	
+	private SparseArray<ResultReceiver> receivers;
+	
 	private static ServiceHelper instance;
 	
-	public ServiceHelper(){}
+	public ServiceHelper(){
+		receivers = new SparseArray<ResultReceiver>();
+	}
 		
 	public static synchronized ServiceHelper getInstance(){
 		if (instance == null){
@@ -67,7 +75,15 @@ public class ServiceHelper{
 		// Add task id to intent
 		// Generate int id for that task,
 		// Store id, operation and receiver
-		int taskId = 0;
+		int taskId;
+		int size = receivers.size();
+		
+		if (size == 0) taskId = 0;
+		else taskId = receivers.keyAt(size - 1) + 1;
+		
+	    ResultReceiver receiver = extras.getParcelable("receiver");
+	    extras.remove("receiver");
+		receivers.put(taskId, receiver);
 		
 		Intent serviceIntent = new Intent(context, APIService.class);
 	    serviceIntent.putExtra(ACTION, action);
@@ -86,11 +102,14 @@ public class ServiceHelper{
 	 * @param resultCode - Success or Error
 	 * @param taskIdentifier - Unique identifier for an operation. ie GET_TASK, id = 3
 	 */
-	public void onReceive(int resultCode, int taskId) {
+	public void onReceive(int resultCode, int taskId, Bundle data) {
 		if (resultCode != SUCCESS) {
 			// failed
 			return;
 		}
+		ResultReceiver receiver = receivers.get(taskId);
+		receiver.send(resultCode, data);
+		receivers.remove(taskId);
 		Log.i(TAG, "result successful");
 	}
 

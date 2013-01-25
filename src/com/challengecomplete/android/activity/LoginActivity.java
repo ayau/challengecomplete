@@ -1,25 +1,38 @@
 package com.challengecomplete.android.activity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.service.ServiceHelper;
+import com.challengecomplete.android.service.ServiceReceiver;
+import com.challengecomplete.android.utils.ChallengeComplete;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 
-public class LoginActivity extends Activity {
-
+public class LoginActivity extends Activity implements ServiceReceiver.Receiver {
+	private static final String TAG = "LoginActivity";
+	
+	public ServiceReceiver mReceiver;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		
+		mReceiver = new ServiceReceiver(new Handler());
+        mReceiver.setReceiver(this);
 	}
 
 	public void login(View v) {
@@ -45,6 +58,7 @@ public class LoginActivity extends Activity {
 								Bundle extras = new Bundle();
 								extras.putString("ftoken", session.getAccessToken());
 								extras.putString("fid", user.getId());
+								extras.putParcelable("receiver", (Parcelable) mReceiver);
 
 								ServiceHelper mServiceHelper = ServiceHelper.getInstance();
 								int taskId = mServiceHelper.startService(LoginActivity.this,ServiceHelper.LOGIN, extras);
@@ -69,5 +83,23 @@ public class LoginActivity extends Activity {
 		intent.addCategory(Intent.CATEGORY_HOME);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
+	}
+
+	@Override
+	public void onReceiveResult(int resultCode, Bundle resultData) {
+		String results = resultData.getString("results");
+		if (results != null){
+			try {
+				JSONObject jObject = new JSONObject(results);
+				String mToken = jObject.getString("token");
+				Log.i(TAG, mToken);
+				ChallengeComplete.setLoggedIn(this);
+				ChallengeComplete.setToken(this, mToken);
+				Log.i(TAG, "Logged in");
+				return;
+			} catch (JSONException e){
+				
+			}
+		}
 	}
 }

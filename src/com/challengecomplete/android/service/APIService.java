@@ -1,12 +1,8 @@
 package com.challengecomplete.android.service;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.challengecomplete.android.utils.ChallengeComplete;
-
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 /**
@@ -20,9 +16,9 @@ public class APIService extends IntentService {
 		super(NAME);
 	}
 
-	public interface Receiver{
-		public void onReceive(int resultCode, int action, String result);
-	}
+//	public interface Receiver{
+//		public void onReceive(int resultCode, int action, String result);
+//	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
@@ -32,10 +28,11 @@ public class APIService extends IntentService {
 		int action = intent.getIntExtra(ServiceHelper.ACTION, 0);
 		int taskId = intent.getIntExtra(ServiceHelper.TASK_ID, 0);
 		
+		ServiceHelper mServiceHelper;
 		String results;
+		Bundle bundle = new Bundle();
 		
 		switch (action) {
-		
 		case ServiceHelper.LOGIN:
 			Log.i(TAG, "LOGIN");
 			
@@ -47,34 +44,20 @@ public class APIService extends IntentService {
 			
 			results = HttpCaller.getRequest(this, "/login?ftoken=" + token + "&fid=" + fid);
 			
-			// This part only temporary. Should be done in receiver
-			if (results != null){
-				try {
-					JSONObject jObject = new JSONObject(results);
-					String mToken = jObject.getString("token");
-					Log.i(TAG, mToken);
-					ChallengeComplete.setLoggedIn(this);
-					ChallengeComplete.setToken(this, mToken);
-					Log.i(TAG, "Logged in");
-					return;
-				} catch (JSONException e){
-					
-				}
-			}
+			bundle.putString("results", results);
 			
-//			ServiceHelper mServiceHelper = ServiceHelper.getInstance();
-//			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId);
+			mServiceHelper = ServiceHelper.getInstance();
+			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId, bundle);
 			
 			break;
 		case ServiceHelper.GET_ME:
 			Log.i(TAG, "GET ME");
 			results = HttpCaller.getRequest(this, "/me");
 			
-			if (results != null)
-				Log.i(TAG, results);
+			bundle.putString("results", results);
 			
-			ServiceHelper mServiceHelper = ServiceHelper.getInstance();
-			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId);
+			mServiceHelper = ServiceHelper.getInstance();
+			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId, bundle);
 			
 			break;
 			
