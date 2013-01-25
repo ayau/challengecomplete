@@ -1,7 +1,5 @@
 package com.challengecomplete.android.service;
 
-import java.util.HashMap;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -81,8 +79,8 @@ public class ServiceHelper{
 		if (size == 0) taskId = 0;
 		else taskId = receivers.keyAt(size - 1) + 1;
 		
-	    ResultReceiver receiver = extras.getParcelable("receiver");
-	    extras.remove("receiver");
+	    ResultReceiver receiver = extras.getParcelable(ServiceReceiver.NAME);
+	    extras.remove(ServiceReceiver.NAME);
 		receivers.put(taskId, receiver);
 		
 		Intent serviceIntent = new Intent(context, APIService.class);

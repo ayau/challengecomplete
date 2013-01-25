@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.challengecomplete.android.R;
+import com.challengecomplete.android.service.APIService;
 import com.challengecomplete.android.service.ServiceHelper;
 import com.challengecomplete.android.service.ServiceReceiver;
 import com.challengecomplete.android.utils.ChallengeComplete;
@@ -58,7 +59,7 @@ public class LoginActivity extends Activity implements ServiceReceiver.Receiver 
 								Bundle extras = new Bundle();
 								extras.putString("ftoken", session.getAccessToken());
 								extras.putString("fid", user.getId());
-								extras.putParcelable("receiver", (Parcelable) mReceiver);
+								extras.putParcelable(ServiceReceiver.NAME, (Parcelable) mReceiver);
 
 								ServiceHelper mServiceHelper = ServiceHelper.getInstance();
 								int taskId = mServiceHelper.startService(LoginActivity.this,ServiceHelper.LOGIN, extras);
@@ -87,15 +88,17 @@ public class LoginActivity extends Activity implements ServiceReceiver.Receiver 
 
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
-		String results = resultData.getString("results");
+		String results = resultData.getString(APIService.RESULTS);
+		
 		if (results != null){
 			try {
 				JSONObject jObject = new JSONObject(results);
 				String mToken = jObject.getString("token");
 				Log.i(TAG, mToken);
-				ChallengeComplete.setLoggedIn(this);
+				ChallengeComplete.setLoggedIn(this, true);
 				ChallengeComplete.setToken(this, mToken);
 				Log.i(TAG, "Logged in");
+				finish();
 				return;
 			} catch (JSONException e){
 				

@@ -11,6 +11,8 @@ import android.util.Log;
 public class APIService extends IntentService {
 	public static final String TAG = "APIService";
 	public static final String NAME = "APIService";
+	
+	public static final String RESULTS = "results";
 
 	public APIService() {
 		super(NAME);
@@ -44,7 +46,7 @@ public class APIService extends IntentService {
 			
 			results = HttpCaller.getRequest(this, "/login?ftoken=" + token + "&fid=" + fid);
 			
-			bundle.putString("results", results);
+			bundle.putString(RESULTS, results);
 			
 			mServiceHelper = ServiceHelper.getInstance();
 			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId, bundle);
@@ -54,7 +56,7 @@ public class APIService extends IntentService {
 			Log.i(TAG, "GET ME");
 			results = HttpCaller.getRequest(this, "/me");
 			
-			bundle.putString("results", results);
+			bundle.putString(RESULTS, results);
 			
 			mServiceHelper = ServiceHelper.getInstance();
 			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId, bundle);

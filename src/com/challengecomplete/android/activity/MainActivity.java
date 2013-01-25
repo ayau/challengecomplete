@@ -1,5 +1,8 @@
 package com.challengecomplete.android.activity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +17,7 @@ import android.widget.FrameLayout;
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.fragment.MainFragment;
 import com.challengecomplete.android.fragment.SideFragment;
+import com.challengecomplete.android.service.APIService;
 import com.challengecomplete.android.service.ServiceHelper;
 import com.challengecomplete.android.service.ServiceReceiver;
 import com.challengecomplete.android.utils.ChallengeComplete;
@@ -67,7 +71,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 		// Update tasks
 
 		Bundle extras = new Bundle();
-		extras.putParcelable("receiver", (Parcelable) mReceiver);
+		extras.putParcelable(ServiceReceiver.NAME, (Parcelable) mReceiver);
 		
         ServiceHelper mServiceHelper = ServiceHelper.getInstance();
     	int taskId = mServiceHelper.startService(this, ServiceHelper.GET_ME, extras);
@@ -93,7 +97,14 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
-		String results = resultData.getString("results");
-		Log.i(TAG, results);
+		String results = resultData.getString(APIService.RESULTS);
+		
+		if (results != null){
+			try {
+				JSONObject jObject = new JSONObject(results);
+//				String mToken = jObject.getString("token");
+				
+			} catch (JSONException e){}
+		}
 	}
 }

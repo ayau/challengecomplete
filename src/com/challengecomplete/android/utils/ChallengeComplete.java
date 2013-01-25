@@ -15,8 +15,8 @@ public class ChallengeComplete {
 		return pref.getBoolean(KEY_LOGGEDIN, false);
 	}
 	
-	public static void setLoggedIn(Context context){
-		writeBooleanPreferences(context, KEY_LOGGEDIN, true);
+	public static void setLoggedIn(Context context, boolean isLoggedIn){
+		writeBooleanPreferences(context, KEY_LOGGEDIN, isLoggedIn);
 	}
 	
 	public static String getToken(Context context){

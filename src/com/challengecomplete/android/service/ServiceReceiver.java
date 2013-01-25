@@ -6,6 +6,7 @@ import android.os.ResultReceiver;
 
 public class ServiceReceiver extends ResultReceiver {
 	private Receiver mReceiver;
+	public static final String NAME = "receiver";
 
     public ServiceReceiver(Handler handler) {
         super(handler);
