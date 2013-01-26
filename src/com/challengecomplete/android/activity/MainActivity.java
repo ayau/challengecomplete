@@ -72,8 +72,6 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     
     // temporary
     public void fetch(){
-		// Update tasks
-
 		Bundle extras = new Bundle();
 		extras.putParcelable(ServiceReceiver.NAME, (Parcelable) mReceiver);
 		
@@ -106,8 +104,10 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 		if (results != null){
 			try {
 				JSONObject jObject = new JSONObject(results);
-//				String mToken = jObject.getString("token");
-				
+				ChallengeComplete.setUserId(this, jObject.getInt("id"));
+				ChallengeComplete.setUserName(this, jObject.getString("name"));
+				ChallengeComplete.setUserPointsTotal(this, jObject.getInt("points"));
+				ChallengeComplete.setUserPointsMonth(this, jObject.getInt("points_this_month"));
 			} catch (JSONException e){}
 		}
 	}

@@ -16,11 +16,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.challengecomplete.android.R;
+import com.challengecomplete.android.utils.ChallengeComplete;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
 
 
 public class SideFragment extends ListFragment{
+	private View mView;
 	Context context;
 	LayoutInflater inflater;
 	
@@ -32,7 +34,7 @@ public class SideFragment extends ListFragment{
 	
 	@Override
 	public void onViewCreated(View v, Bundle savedInstanceState){
-		
+		mView = v;
 	}
 	
 	@Override
@@ -40,6 +42,15 @@ public class SideFragment extends ListFragment{
 		super.onActivityCreated(savedInstanceState);
 		context = getActivity();
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		TextView userName = (TextView) mView.findViewById(R.id.user_name);
+		TextView userPointsTotal = (TextView) mView.findViewById(R.id.user_points_total);
+		TextView userPointsMonth = (TextView) mView.findViewById(R.id.user_points_month);
+		
+		userName.setText(ChallengeComplete.getUserName(context));
+		userPointsTotal.setText(ChallengeComplete.getUserPointsTotal(context) + "");
+		userPointsMonth.setText(ChallengeComplete.getUserPointsMonth(context) + "");
+		
 		
 		ListView list = this.getListView();
 		

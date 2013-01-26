@@ -4,11 +4,22 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+/**
+ * Static class that stores and retrieves preferences
+ * @author alexyau
+ *
+ */
 public class ChallengeComplete {
 	private static final String PREFERENCE_NAME = "ChallengeComplete";
 	
 	private static final String KEY_TOKEN = "token";
 	private static final String KEY_LOGGEDIN = "loggedin";
+	
+	private static final String KEY_USER_ID = "user_id";
+	private static final String KEY_USER_NAME = "user_name";
+	private static final String KEY_USER_POINTS_TOTAL = "user_points_total";
+	private static final String KEY_USER_POINTS_MONTH = "user_points_month";
+	
 	
 	public static boolean isLoggedIn(Context context){
 		SharedPreferences pref = getSharedPreferences(context);
@@ -28,8 +39,56 @@ public class ChallengeComplete {
 		writeStringPreferences(context, KEY_TOKEN, token);
 	}
 	
+	public static int getUserId(Context context){
+		SharedPreferences pref = getSharedPreferences(context);
+		return pref.getInt(KEY_USER_ID, 0);
+	}
+	
+	public static void setUserId(Context context, int id){
+		writeIntPreferences(context, KEY_USER_ID, id);
+	}
+	
+	public static String getUserName(Context context){
+		SharedPreferences pref = getSharedPreferences(context);
+		return pref.getString(KEY_USER_NAME, null);
+	}
+	
+	public static void setUserName(Context context, String name){
+		writeStringPreferences(context, KEY_USER_NAME, name);
+	}
+	
+	public static int getUserPointsTotal(Context context){
+		SharedPreferences pref = getSharedPreferences(context);
+		return pref.getInt(KEY_USER_POINTS_TOTAL, 0);
+	}
+	
+	public static void setUserPointsTotal(Context context, int points){
+		writeIntPreferences(context, KEY_USER_POINTS_TOTAL, points);
+	}
+	
+	public static int getUserPointsMonth(Context context){
+		SharedPreferences pref = getSharedPreferences(context);
+		return pref.getInt(KEY_USER_POINTS_MONTH, 0);
+	}
+	
+	public static void setUserPointsMonth(Context context, int points){
+		writeIntPreferences(context, KEY_USER_POINTS_MONTH, points);
+	}
+	
+	
+	// Helper methods
 	public static SharedPreferences getSharedPreferences (Context context) {
 		return context.getSharedPreferences(PREFERENCE_NAME, 0);
+	}
+	
+	
+	private static void writeIntPreferences(Context context, String name, int value){
+		SharedPreferences pref = getSharedPreferences(context);
+		Editor editor = pref.edit();
+		
+		editor.putInt(name, value);
+		
+		editor.commit();
 	}
 	
 	private static void writeBooleanPreferences(Context context, String name, boolean value){

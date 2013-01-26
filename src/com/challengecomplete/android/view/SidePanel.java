@@ -2,16 +2,17 @@ package com.challengecomplete.android.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.challengecomplete.android.R;
+import com.challengecomplete.android.utils.ChallengeComplete;
 
 public class SidePanel extends ViewGroup{
 	
 	public SidePanel(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
