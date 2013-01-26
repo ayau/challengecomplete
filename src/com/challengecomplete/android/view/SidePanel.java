@@ -2,10 +2,13 @@ package com.challengecomplete.android.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 public class SidePanel extends ViewGroup{
-
+	
 	public SidePanel(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
@@ -16,19 +19,32 @@ public class SidePanel extends ViewGroup{
 		int height = MeasureSpec.getSize(heightMeasureSpec);
 		int width = MeasureSpec.getSize(widthMeasureSpec);
 		
+		width = (int) (width*5/6);
+		
 		setMeasuredDimension(width, height);
 
 		for(int i = 0; i < getChildCount(); i++){
-			getChildAt(i).measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), heightMeasureSpec);
+			getChildAt(i).measure(
+					MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+					MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 		}
 	}
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		for(int i = 0; i < getChildCount(); i++){
-			getChildAt(i).layout(l, t, r, b);
-		}
+		int childTop = 0;
 		
-	}
+		for(int i = 0; i < getChildCount(); i++){
+			View child = getChildAt(i);
+			
+			int childWidth = child.getMeasuredWidth();
+			int childHeight = child.getMeasuredHeight();
+			
+			if (i == getChildCount() - 1) child.layout(0, childTop, childWidth, b);
+			else child.layout(0, childTop, childWidth, childTop + childHeight);
+			
+			childTop += childHeight;
+		}
 
+	}
 }

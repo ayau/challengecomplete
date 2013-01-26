@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.fragment.MainFragment;
@@ -22,6 +24,8 @@ import com.challengecomplete.android.service.ServiceHelper;
 import com.challengecomplete.android.service.ServiceReceiver;
 import com.challengecomplete.android.utils.ChallengeComplete;
 import com.challengecomplete.android.view.ScrollView;
+import com.larvalabs.svgandroid.SVG;
+import com.larvalabs.svgandroid.SVGParser;
 
 public class MainActivity extends FragmentActivity implements ServiceReceiver.Receiver{
 	private static final String TAG = "MainActivity";

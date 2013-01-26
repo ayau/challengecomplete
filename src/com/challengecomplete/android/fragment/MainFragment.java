@@ -16,4 +16,5 @@ public class MainFragment extends Fragment{
 		View root = inflater.inflate(R.layout.fragment_main, container, false);
 		return root;
 	}
+
 }
