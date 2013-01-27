@@ -102,13 +102,16 @@ public class ServiceHelper{
 	 */
 	public void onReceive(int resultCode, int taskId, Bundle data) {
 		if (resultCode != SUCCESS) {
-			// failed
-			return;
+			// should still do something even if it failed
+			//return;
+			Log.i(TAG, "result failed");
+		} else {
+			Log.i(TAG, "result successful");
 		}
+		
 		ResultReceiver receiver = receivers.get(taskId);
 		receiver.send(resultCode, data);
 		receivers.remove(taskId);
-		Log.i(TAG, "result successful");
 	}
 
 }

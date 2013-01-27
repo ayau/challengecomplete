@@ -43,14 +43,7 @@ public class SideFragment extends ListFragment{
 		context = getActivity();
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		TextView userName = (TextView) mView.findViewById(R.id.user_name);
-		TextView userPointsTotal = (TextView) mView.findViewById(R.id.user_points_total);
-		TextView userPointsMonth = (TextView) mView.findViewById(R.id.user_points_month);
-		
-		userName.setText(ChallengeComplete.getUserName(context));
-		userPointsTotal.setText(ChallengeComplete.getUserPointsTotal(context) + "");
-		userPointsMonth.setText(ChallengeComplete.getUserPointsMonth(context) + "");
-		
+		displayUser();
 		
 		ListView list = this.getListView();
 		
@@ -70,6 +63,16 @@ public class SideFragment extends ListFragment{
 
 		MenuListAdapter adapter = new MenuListAdapter(context, R.layout.list_item_menu, menu);
 		list.setAdapter(adapter);
+	}
+	
+	public void displayUser(){
+		TextView userName = (TextView) mView.findViewById(R.id.user_name);
+		TextView userPointsTotal = (TextView) mView.findViewById(R.id.user_points_total);
+		TextView userPointsMonth = (TextView) mView.findViewById(R.id.user_points_month);
+		
+		userName.setText(ChallengeComplete.getUserName(context));
+		userPointsTotal.setText(ChallengeComplete.getUserPointsTotal(context) + "");
+		userPointsMonth.setText(ChallengeComplete.getUserPointsMonth(context) + "");
 	}
 	
 	public class MenuListAdapter extends ArrayAdapter<MenuItem>{

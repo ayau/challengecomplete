@@ -1,5 +1,6 @@
 package com.challengecomplete.android.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -107,5 +108,16 @@ public class ChallengeComplete {
 		editor.putString(name, value);
 		
 		editor.commit();
+	}
+	
+	
+	// Other utils
+	public static ProgressDialog showDialog(Context context) {
+		return ProgressDialog.show(context, "", "Loading. Please wait...", true);
+	}
+	
+	public static void dismissDialog(ProgressDialog pd) {
+		if (pd != null) 
+			pd.dismiss();
 	}
 }

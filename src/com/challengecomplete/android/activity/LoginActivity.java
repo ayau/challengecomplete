@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +27,7 @@ public class LoginActivity extends Activity implements ServiceReceiver.Receiver 
 	private static final String TAG = "LoginActivity";
 	
 	public ServiceReceiver mReceiver;
+	private ProgressDialog mProgressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class LoginActivity extends Activity implements ServiceReceiver.Receiver 
 	}
 
 	public void login(View v) {
+		mProgressDialog = ChallengeComplete.showDialog(LoginActivity.this);
+		
 		// start Facebook Login
 		Session.openActiveSession(this, true, new Session.StatusCallback() {
 
@@ -90,6 +94,8 @@ public class LoginActivity extends Activity implements ServiceReceiver.Receiver 
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		String results = resultData.getString(APIService.RESULTS);
 		
+		ChallengeComplete.dismissDialog(mProgressDialog);
+			
 		if (results != null){
 			try {
 				JSONObject jObject = new JSONObject(results);

@@ -19,8 +19,8 @@ import com.challengecomplete.android.utils.ChallengeComplete;
 public class HttpCaller {
 	private static final String TAG ="HttpCaller";
 	
-//	public static final String HOST = "http://158.130.236.88:3000/api";
-	public static final String HOST = "http://192.168.1.144:3000/api";
+	public static final String HOST = "http://158.130.238.27:3000/api";
+//	public static final String HOST = "http://192.168.1.144:3000/api";
 //	public static final String HOST ="http://mygoalthisyear.herokuapp.com/api";
 	
 	public static String getRequest(Context context, String path) {
