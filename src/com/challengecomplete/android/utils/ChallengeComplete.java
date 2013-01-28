@@ -21,6 +21,7 @@ public class ChallengeComplete {
 	
 	// User information
 	private static final String KEY_USER_ID = "user_id";
+	private static final String KEY_USER_AVATAR = "user_avatar";
 	private static final String KEY_USER_NAME = "user_name";
 	private static final String KEY_USER_POINTS_TOTAL = "user_points_total";
 	private static final String KEY_USER_POINTS_MONTH = "user_points_month";
@@ -60,6 +61,15 @@ public class ChallengeComplete {
 	
 	public static void setUserId(Context context, int id){
 		writeIntPreferences(context, KEY_USER_ID, id);
+	}
+	
+	public static String getUserAvatar(Context context){
+		SharedPreferences pref = getSharedPreferences(context);
+		return pref.getString(KEY_USER_AVATAR, null);
+	}
+	
+	public static void setUserAvatar(Context context, String avatar){
+		writeStringPreferences(context, KEY_USER_AVATAR, avatar);
 	}
 	
 	public static String getUserName(Context context){

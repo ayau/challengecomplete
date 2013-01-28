@@ -121,6 +121,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 			try {
 				JSONObject jObject = new JSONObject(results);
 				ChallengeComplete.setUserId(this, jObject.getInt("id"));
+				ChallengeComplete.setUserAvatar(this, jObject.getString("avatar"));
 				ChallengeComplete.setUserName(this, jObject.getString("name"));
 				ChallengeComplete.setUserPointsTotal(this, jObject.getInt("points"));
 				ChallengeComplete.setUserPointsMonth(this, jObject.getInt("points_this_month"));

@@ -3,10 +3,8 @@ package com.challengecomplete.android.fragment;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +15,14 @@ import android.widget.TextView;
 
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.utils.ChallengeComplete;
-import com.larvalabs.svgandroid.SVG;
-import com.larvalabs.svgandroid.SVGParser;
+import com.google.android.imageloader.ImageLoader;
 
 
 public class SideFragment extends ListFragment{
 	private View mView;
 	Context context;
 	LayoutInflater inflater;
+	ImageLoader mImageLoader;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -42,6 +40,9 @@ public class SideFragment extends ListFragment{
 		super.onActivityCreated(savedInstanceState);
 		context = getActivity();
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		// Intantiate imageLoader
+		mImageLoader = new ImageLoader();
 		
 		displayUser();
 		
@@ -66,6 +67,7 @@ public class SideFragment extends ListFragment{
 	}
 	
 	public void displayUser(){
+		ImageView userAvatar = (ImageView) mView.findViewById(R.id.user_avatar);
 		TextView userName = (TextView) mView.findViewById(R.id.user_name);
 		TextView userPointsTotal = (TextView) mView.findViewById(R.id.user_points_total);
 		TextView userPointsMonth = (TextView) mView.findViewById(R.id.user_points_month);
@@ -73,6 +75,11 @@ public class SideFragment extends ListFragment{
 		userName.setText(ChallengeComplete.getUserName(context));
 		userPointsTotal.setText(ChallengeComplete.getUserPointsTotal(context) + "");
 		userPointsMonth.setText(ChallengeComplete.getUserPointsMonth(context) + "");
+		
+		String url = ChallengeComplete.getUserAvatar(context);
+		
+		if (url != null)
+			mImageLoader.bind(userAvatar, url, null);
 	}
 	
 	public class MenuListAdapter extends ArrayAdapter<MenuItem>{
