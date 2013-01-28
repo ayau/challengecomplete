@@ -16,6 +16,10 @@ public class ChallengeComplete {
 	private static final String KEY_TOKEN = "token";
 	private static final String KEY_LOGGEDIN = "loggedin";
 	
+	// Boolean indicating whether a route has been fetched before
+	private static final String KEY_FETCHED_ME = "fetched_me";
+	
+	// User information
 	private static final String KEY_USER_ID = "user_id";
 	private static final String KEY_USER_NAME = "user_name";
 	private static final String KEY_USER_POINTS_TOTAL = "user_points_total";
@@ -38,6 +42,15 @@ public class ChallengeComplete {
 	
 	public static void setToken(Context context, String token){
 		writeStringPreferences(context, KEY_TOKEN, token);
+	}
+	
+	public static boolean hasFetchedMe(Context context){
+		SharedPreferences pref = getSharedPreferences(context);
+		return pref.getBoolean(KEY_FETCHED_ME, false);
+	}
+	
+	public static void setFetchedMe(Context context){
+		writeBooleanPreferences(context, KEY_FETCHED_ME, true);
 	}
 	
 	public static int getUserId(Context context){

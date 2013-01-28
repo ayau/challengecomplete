@@ -11,6 +11,8 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.content.Context;
 
@@ -19,7 +21,7 @@ import com.challengecomplete.android.utils.ChallengeComplete;
 public class HttpCaller {
 	private static final String TAG ="HttpCaller";
 	
-	public static final String HOST = "http://158.130.238.27:3000/api";
+	public static final String HOST = "http://158.130.233.77:3000/api";
 //	public static final String HOST = "http://192.168.1.144:3000/api";
 //	public static final String HOST ="http://mygoalthisyear.herokuapp.com/api";
 	
@@ -40,11 +42,16 @@ public class HttpCaller {
 		// Execute the request
 		HttpResponse response;
 		
+		// Set timeout
+		final HttpParams httpParams = httpclient.getParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, 5000);
+		
 		try {
 			response = httpclient.execute(httpget);
 			
 			// Examine the response status
 			String result = new BasicResponseHandler().handleResponse(response);
+			
 			return result;
 
 		} catch (HttpResponseException e) {
@@ -52,6 +59,7 @@ public class HttpCaller {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		return null;
 	}
 

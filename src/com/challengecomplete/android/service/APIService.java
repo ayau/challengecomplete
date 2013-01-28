@@ -60,7 +60,7 @@ public class APIService extends IntentService {
 			
 			mServiceHelper = ServiceHelper.getInstance();
 			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId, bundle);
-			
+
 			break;
 			
 //		case ServiceHelper.GET_TASKS:

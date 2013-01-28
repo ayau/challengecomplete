@@ -69,21 +69,24 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
         }
         
         // Otherwise, fetch /api/me
-        fetch();
+        fetchMe();
     }
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	switch (requestCode){
     		case INTENT_LOGIN:
-    			fetch();
+    			fetchMe();
     			break;
     	}
     }
     
     // temporary
-    public void fetch(){
-		mProgressDialog = ChallengeComplete.showDialog(this);
+    public void fetchMe(){
+    	
+    	// Only show dialog if first time fetching
+    	if (!ChallengeComplete.hasFetchedMe(this))
+    		mProgressDialog = ChallengeComplete.showDialog(this);
 		
 		Bundle extras = new Bundle();
 		extras.putParcelable(ServiceReceiver.NAME, (Parcelable) mReceiver);
@@ -122,9 +125,10 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 				ChallengeComplete.setUserPointsTotal(this, jObject.getInt("points"));
 				ChallengeComplete.setUserPointsMonth(this, jObject.getInt("points_this_month"));
 				mSideFragment.displayUser();
+				ChallengeComplete.setFetchedMe(this);
 			} catch (JSONException e){}
 		}
-
+		
 		ChallengeComplete.dismissDialog(mProgressDialog);
 	}
 }
