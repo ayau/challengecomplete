@@ -85,8 +85,8 @@ public class SideFragment extends ListFragment{
 			mImageLoader.bind(userAvatar, url, callback);
 	}
 	
+	// Just a temporary way to make the avatar circular
 	public final ImageLoader.Callback callback = new ImageLoader.Callback(){
-
 		@Override
 		public void onImageLoaded(ImageView view, String url) {
 			Bitmap bitmap = ((BitmapDrawable) view.getDrawable()).getBitmap();
