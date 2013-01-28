@@ -3,6 +3,8 @@ package com.challengecomplete.android.fragment;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.utils.ChallengeComplete;
+import com.challengecomplete.android.utils.Media;
 import com.google.android.imageloader.ImageLoader;
 
 
@@ -79,8 +82,24 @@ public class SideFragment extends ListFragment{
 		String url = ChallengeComplete.getUserAvatar(context);
 		
 		if (url != null)
-			mImageLoader.bind(userAvatar, url, null);
+			mImageLoader.bind(userAvatar, url, callback);
 	}
+	
+	public final ImageLoader.Callback callback = new ImageLoader.Callback(){
+
+		@Override
+		public void onImageLoaded(ImageView view, String url) {
+			Bitmap bitmap = ((BitmapDrawable) view.getDrawable()).getBitmap();
+			Bitmap newBitmap = Media.getRoundedCornerBitmap(context, bitmap);
+			view.setImageBitmap(newBitmap);
+		}
+
+		@Override
+		public void onImageError(ImageView view, String url, Throwable error) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
 	
 	public class MenuListAdapter extends ArrayAdapter<MenuItem>{
 		ArrayList<MenuItem> menu;
