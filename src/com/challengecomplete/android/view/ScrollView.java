@@ -93,8 +93,6 @@ public class ScrollView extends HorizontalScrollView{
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent ev){
-		if (bounceAnimation != null)
-			bounceAnimation.cancel();
 		
 		switch(ev.getAction()){
 		case MotionEvent.ACTION_DOWN:
@@ -102,6 +100,13 @@ public class ScrollView extends HorizontalScrollView{
 			if(x + getScrollX() < closedX){
 				return false;
 			}
+
+			// intercept bounce animation
+			if (bounceAnimation != null){
+				bounceAnimation.cancel();
+				bounceAnimation = null;
+			}
+
 			scrolled = false;
 			break;
 		case MotionEvent.ACTION_UP:

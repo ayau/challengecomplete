@@ -1,0 +1,194 @@
+package com.challengecomplete.android.models.goals;
+
+import java.util.Date;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+
+
+public class Goal {
+	private int id;
+	private String name;
+	private String description;
+	private int points;
+	private long created_at;
+	private long updated_at;
+	private long deadline;
+	private boolean has_deadline;
+	private String badge;
+	private String color;
+	private int owner_id;
+	private int parent_id;
+	
+	// constructor not complete
+	// TODO
+	// need default values
+	public Goal(String name, String description, int points, long created_at, long updated_at,
+			long deadline, boolean has_deadline, String badge, String color, int owner_id, int parent_id){
+		this.name = name;
+		this.description = description;
+		this.points = points;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+		this.deadline = deadline;
+		this.has_deadline = has_deadline;
+		this.badge = badge;
+		this.color = color;
+		this.owner_id = owner_id;
+		this.parent_id = parent_id;
+	}
+	
+	public void saveToDB(Context context) {
+//	    long updated_at = new Date().getTime();
+//		ContentValues values = new ContentValues();
+//		values.put(TaskTable.COLUMN_ID, id);
+//	    values.put(TaskTable.COLUMN_NAME, name);
+//	    values.put(TaskTable.COLUMN_DESCRIPTION, description);
+//	    values.put(TaskTable.COLUMN_CATEGORY, category);
+//	    values.put(TaskTable.COLUMN_CREATED_AT, created_at);
+//	    values.put(TaskTable.COLUMN_DEADLINE, deadline);
+//	    values.put(TaskTable.COLUMN_UPDATED_AT, updated_at);
+//	    values.put(TaskTable.COLUMN_FINISHED_AT, finished_at);
+//	    values.put(TaskTable.COLUMN_PRIORITY, priority);
+//	    values.put(TaskTable.COLUMN_DIFFICULTY, difficulty);
+//	    values.put(TaskTable.COLUMN_TIME, time);
+//	    int finishedInt = 0;
+//	    if(finished) finishedInt = 1;
+//	    values.put(TaskTable.COLUMN_FINISHED, finishedInt);
+//	    values.put(TaskTable.COLUMN_STATE, state);
+//	    
+//	    if (id == null){
+//	    	Uri newTaskUri = context.getContentResolver().insert(TaskContentProvider.CONTENT_URI, values);
+//	    }else{
+//	    	Uri updateUri = Uri.parse(TaskContentProvider.CONTENT_URI + "/" + id);
+//		    context.getContentResolver().update(updateUri, values, null, null);
+//	    }
+//	    
+	    // TODO
+	    // update task when done
+	}
+	
+	public void delete(Context context, Goal goal) {
+		int id = goal.getId();
+		Uri deleteUri = Uri.parse(GoalContentProvider.CONTENT_URI + "/" + id);
+		context.getContentResolver().delete(deleteUri, null, null);
+	}
+	
+	
+//	public Task populateFromCursor(Cursor c){
+//		Task task = new Task();
+//		task.setId(c.getLong(0));
+//		task.setName(c.getString(1));
+//		task.setDescription(c.getString(2));
+//		task.setCategory(c.getString(3));
+//		task.setCreated_at(c.getLong(4));
+//		task.setDeadline(c.getLong(5));
+//		task.setUpdated_at(c.getLong(6));
+//		task.setFinished_at(c.getLong(7));
+//		task.setPriority(c.getInt(8));
+//		task.setDifficulty(c.getInt(9));
+//		task.setTime(c.getLong(10));
+//		task.setFinished(c.getInt(11) == 1);
+//	    return task;
+//	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
+
+	public long getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(long created_at) {
+		this.created_at = created_at;
+	}
+
+	public long getUpdated_at() {
+		return updated_at;
+	}
+
+	public void setUpdated_at(long updated_at) {
+		this.updated_at = updated_at;
+	}
+
+	public long getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(long deadline) {
+		this.deadline = deadline;
+	}
+
+	public boolean isHas_deadline() {
+		return has_deadline;
+	}
+
+	public void setHas_deadline(boolean has_deadline) {
+		this.has_deadline = has_deadline;
+	}
+
+	public String getBadge() {
+		return badge;
+	}
+
+	public void setBadge(String badge) {
+		this.badge = badge;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public int getOwner_id() {
+		return owner_id;
+	}
+
+	public void setOwner_id(int owner_id) {
+		this.owner_id = owner_id;
+	}
+
+	public int getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(int parent_id) {
+		this.parent_id = parent_id;
+	}	
+}
