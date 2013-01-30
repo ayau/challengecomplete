@@ -45,7 +45,7 @@ public class GoalTable {
 		  + COLUMN_POINTS + " integer not null, "
 		  + COLUMN_CREATED_AT + " integer not null, "
 		  + COLUMN_UPDATED_AT + " integer not null, "
-		  + COLUMN_DEADLINE + " integer not null, "
+		  + COLUMN_DEADLINE + " text not null, "
 		  + COLUMN_HAS_DEADLINE + " integer not null, "
 		  + COLUMN_BADGE + " text not null, "
 		  + COLUMN_COLOR + " text not null, "

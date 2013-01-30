@@ -1,12 +1,7 @@
 package com.challengecomplete.android.models.goals;
 
-import java.util.Date;
-
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 
@@ -17,7 +12,7 @@ public class Goal {
 	private int points;
 	private long created_at;
 	private long updated_at;
-	private long deadline;
+	private String deadline;
 	private boolean has_deadline;
 	private String badge;
 	private String color;
@@ -28,7 +23,7 @@ public class Goal {
 	// TODO
 	// need default values
 	public Goal(String name, String description, int points, long created_at, long updated_at,
-			long deadline, boolean has_deadline, String badge, String color, int owner_id, int parent_id){
+			String deadline, boolean has_deadline, String badge, String color, int owner_id, int parent_id){
 		this.name = name;
 		this.description = description;
 		this.points = points;
@@ -142,11 +137,11 @@ public class Goal {
 		this.updated_at = updated_at;
 	}
 
-	public long getDeadline() {
+	public String getDeadline() {
 		return deadline;
 	}
 
-	public void setDeadline(long deadline) {
+	public void setDeadline(String deadline) {
 		this.deadline = deadline;
 	}
 

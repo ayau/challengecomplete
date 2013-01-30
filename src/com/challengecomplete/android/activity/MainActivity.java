@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,8 +17,10 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.challengecomplete.android.R;
-import com.challengecomplete.android.fragment.MainFragment;
+import com.challengecomplete.android.fragment.CurrentGoalsFragment;
 import com.challengecomplete.android.fragment.SideFragment;
+import com.challengecomplete.android.models.goals.GoalContentProvider;
+import com.challengecomplete.android.models.goals.GoalProcessor;
 import com.challengecomplete.android.service.APIService;
 import com.challengecomplete.android.service.ServiceHelper;
 import com.challengecomplete.android.service.ServiceReceiver;
@@ -45,8 +48,8 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
         mScrollView = (ScrollView) findViewById(R.id.scrollview);
         
         FrameLayout fl = (FrameLayout) findViewById(R.id.fragment_container);
-        MainFragment mFragment = new MainFragment();
-//      TaskListFragment mFragment = new TaskListFragment();
+//        MainFragment mFragment = new MainFragment();
+        CurrentGoalsFragment mFragment = new CurrentGoalsFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(fl.getId(), mFragment);
       
@@ -160,15 +163,15 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 			fetchMeId = -1;
 			
 		} else if (taskId == fetchCurrentGoalsId){
-//			ContentValues[] contentValues = GoalProcessor.bulkCreateContentValues(results);
-//			if (contentValues != null && contentValues.length > 0)
-//				getContentResolver().bulkInsert(GoalContentProvider.CONTENT_URI, contentValues);
-//			// TODO
-//			// Notify Processor.
-//			// getProcessor by Id -> runTask (GET_TASKS) to update database
-////			getContentResolver()
-//			ServiceHelper sHelper = ServiceHelper.getInstance();
-//			sHelper.onReceive(ServiceHelper.SUCCESS, taskId);
+			ContentValues[] contentValues = GoalProcessor.bulkCreateContentValues(results);
+			if (contentValues != null && contentValues.length > 0)
+				getContentResolver().bulkInsert(GoalContentProvider.CONTENT_URI, contentValues);
+			
+			// TODO
+			// Notify Processor.
+			// getProcessor by Id -> runTask (GET_TASKS) to update database
+//			getContentResolver()
+			
 			fetchCurrentGoalsId = -1;
 		}
 		

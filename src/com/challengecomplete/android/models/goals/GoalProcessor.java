@@ -9,7 +9,7 @@ import android.content.ContentValues;
 
 public class GoalProcessor {
 
-	public final static String ID = "_id";
+	public final static String ID = "id";
 	public final static String NAME = "name";
 	public final static String DESCRIPTION = "description";
 	public final static String POINTS = "points";
@@ -36,7 +36,7 @@ public class GoalProcessor {
 				int points = o.getInt(POINTS);
 				long created_at = o.getLong(CREATED_AT);
 				long updated_at = o.getLong(UPDATED_AT);
-				long deadline = o.getLong(DEADLINE);
+				String deadline = o.getString(DEADLINE);
 				int has_deadline = o.getInt(HAS_DEADLINE);
 				String badge = o.getString(BADGE);
 				String color = o.getString(COLOR);
@@ -58,7 +58,8 @@ public class GoalProcessor {
 		return null;
 	}
 
-	public static ContentValues createContentValues(int id, String name, String description, int points, long created_at, long updated_at, long deadline, 
+	public static ContentValues createContentValues(int id, String name, String description, int points,
+			long created_at, long updated_at, String deadline, 
 			int has_deadline, String badge, String color, int owner_id, int parent_id){ // state
 		
 		ContentValues values = new ContentValues();

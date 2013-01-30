@@ -64,8 +64,7 @@ public class GoalContentProvider extends ContentProvider {
 	    int uriType = sURIMatcher.match(uri);
 	    switch (uriType) {
 	    case GOALS:
-//	    	ServiceHelper sHelper = ServiceHelper.getInstance();
-//	    	sHelper.startService(getContext(), ServiceHelper.GET_GOALS);
+	    	
 	    	break;
 	    case GOAL:
 	    	// Adding the ID to the original query
