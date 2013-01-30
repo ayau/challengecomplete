@@ -30,11 +30,12 @@ public class ServiceHelper{
 	public static final int SUCCESS = 1;
 	
 	//Status
-//	public static final String STATUS_OK = "ok";
+	public static final String STATUS_OK = "ok";
 	
 	// Operations available
 	public static final int LOGIN = 0x00;
 	public static final int GET_ME = 0x01;
+	public static final int GET_CURRENT_GOALS = 0x02;
 	
 	private SparseArray<ResultReceiver> receivers;
 	
@@ -108,6 +109,8 @@ public class ServiceHelper{
 		} else {
 			Log.i(TAG, "result successful");
 		}
+		
+		data.putInt(APIService.TASK_ID, taskId);
 		
 		ResultReceiver receiver = receivers.get(taskId);
 		receiver.send(resultCode, data);

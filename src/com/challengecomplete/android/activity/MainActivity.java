@@ -34,6 +34,9 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 	public ServiceReceiver mReceiver;
 	private ProgressDialog mProgressDialog;
 	
+	private int fetchMeId = -1;
+	private int fetchCurrentGoalsId = -1;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +72,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
         }
         
         // Otherwise, fetch /api/me
-        fetchMe();
+        fetch();
     }
     
     @Override
@@ -81,9 +84,12 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     	}
     }
     
-    // temporary
+    public void fetch(){
+    	fetchMe();
+        fetchCurrentGoals();
+    }
+    
     public void fetchMe(){
-    	
     	// Only show dialog if first time fetching
     	if (!ChallengeComplete.hasFetchedMe(this))
     		mProgressDialog = ChallengeComplete.showDialog(this);
@@ -93,8 +99,23 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 		
         ServiceHelper mServiceHelper = ServiceHelper.getInstance();
     	int taskId = mServiceHelper.startService(this, ServiceHelper.GET_ME, extras);
+    	
+    	fetchMeId = taskId;
+    	
     	Log.i(TAG, "TaskId: " + taskId);
 	}
+    
+    public void fetchCurrentGoals(){
+    	Bundle extras = new Bundle();
+		extras.putParcelable(ServiceReceiver.NAME, (Parcelable) mReceiver);
+		
+        ServiceHelper mServiceHelper = ServiceHelper.getInstance();
+    	int taskId = mServiceHelper.startService(this, ServiceHelper.GET_CURRENT_GOALS, extras);
+    	
+    	fetchCurrentGoalsId = taskId;
+    	
+    	Log.i(TAG, "TaskId: " + taskId);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -119,18 +140,36 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		String results = resultData.getString(APIService.RESULTS);
+		int taskId = resultData.getInt(APIService.TASK_ID);
 		
-		if (results != null){
-			try {
-				JSONObject jObject = new JSONObject(results);
-				ChallengeComplete.setUserId(this, jObject.getInt("id"));
-				ChallengeComplete.setUserAvatar(this, jObject.getString("avatar"));
-				ChallengeComplete.setUserName(this, jObject.getString("name"));
-				ChallengeComplete.setUserPointsTotal(this, jObject.getInt("points"));
-				ChallengeComplete.setUserPointsMonth(this, jObject.getInt("points_this_month"));
-				mSideFragment.displayUser();
-				ChallengeComplete.setFetchedMe(this);
-			} catch (JSONException e){}
+		if (taskId == fetchMeId){
+
+			if (results != null){
+				try {
+					JSONObject jObject = new JSONObject(results);
+					ChallengeComplete.setUserId(this, jObject.getInt("id"));
+					ChallengeComplete.setUserAvatar(this, jObject.getString("avatar"));
+					ChallengeComplete.setUserName(this, jObject.getString("name"));
+					ChallengeComplete.setUserPointsTotal(this, jObject.getInt("points"));
+					ChallengeComplete.setUserPointsMonth(this, jObject.getInt("points_this_month"));
+					mSideFragment.displayUser();
+					ChallengeComplete.setFetchedMe(this);
+				} catch (JSONException e){}
+			}
+			
+			fetchMeId = -1;
+			
+		} else if (taskId == fetchCurrentGoalsId){
+//			ContentValues[] contentValues = GoalProcessor.bulkCreateContentValues(results);
+//			if (contentValues != null && contentValues.length > 0)
+//				getContentResolver().bulkInsert(GoalContentProvider.CONTENT_URI, contentValues);
+//			// TODO
+//			// Notify Processor.
+//			// getProcessor by Id -> runTask (GET_TASKS) to update database
+////			getContentResolver()
+//			ServiceHelper sHelper = ServiceHelper.getInstance();
+//			sHelper.onReceive(ServiceHelper.SUCCESS, taskId);
+			fetchCurrentGoalsId = -1;
 		}
 		
 		ChallengeComplete.dismissDialog(mProgressDialog);

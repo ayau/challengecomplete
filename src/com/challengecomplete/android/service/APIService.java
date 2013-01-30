@@ -1,5 +1,7 @@
 package com.challengecomplete.android.service;
 
+import com.challengecomplete.android.utils.ChallengeComplete;
+
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,14 +15,11 @@ public class APIService extends IntentService {
 	public static final String NAME = "APIService";
 	
 	public static final String RESULTS = "results";
+	public static final String TASK_ID = "task_id";
 
 	public APIService() {
 		super(NAME);
 	}
-
-//	public interface Receiver{
-//		public void onReceive(int resultCode, int action, String result);
-//	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
@@ -62,22 +61,21 @@ public class APIService extends IntentService {
 			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId, bundle);
 
 			break;
+
+		case ServiceHelper.GET_CURRENT_GOALS:
+			Log.i(TAG, "Get current goals");
 			
-//		case ServiceHelper.GET_TASKS:
-//			Log.i(TAG, "Get Tasks");
-//			String results = HttpCaller.getRequest("/tasks");
-//		
-//			ContentValues[] contentValues = TaskProcessor.bulkCreateContentValues(results);
-//			if (contentValues != null && contentValues.length > 0)
-//				getContentResolver().bulkInsert(TaskContentProvider.CONTENT_URI, contentValues);
-//			// TODO
-//			// Notify Processor.
-//			// getProcessor by Id -> runTask (GET_TASKS) to update database
-////			getContentResolver()
-//			ServiceHelper sHelper = ServiceHelper.getInstance();
-//			sHelper.onReceive(ServiceHelper.SUCCESS, taskId);
-//			break;
-		
+			int id = ChallengeComplete.getUserId(this);
+			if (id == 0) return;
+			
+			results = HttpCaller.getRequest(this, "/users/" + id + "/goals/current");
+			
+			bundle.putString(RESULTS, results);
+			
+			mServiceHelper = ServiceHelper.getInstance();
+			mServiceHelper.onReceive(ServiceHelper.SUCCESS, taskId, bundle);
+			
+			break;		
 		default:
 			// No intent specified
 			break;

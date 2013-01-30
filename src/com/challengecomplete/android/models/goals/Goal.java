@@ -11,7 +11,7 @@ import android.net.Uri;
 
 
 public class Goal {
-	private int id;
+	private long id;
 	private String name;
 	private String description;
 	private int points;
@@ -43,37 +43,35 @@ public class Goal {
 	}
 	
 	public void saveToDB(Context context) {
-//	    long updated_at = new Date().getTime();
-//		ContentValues values = new ContentValues();
-//		values.put(TaskTable.COLUMN_ID, id);
-//	    values.put(TaskTable.COLUMN_NAME, name);
-//	    values.put(TaskTable.COLUMN_DESCRIPTION, description);
-//	    values.put(TaskTable.COLUMN_CATEGORY, category);
-//	    values.put(TaskTable.COLUMN_CREATED_AT, created_at);
-//	    values.put(TaskTable.COLUMN_DEADLINE, deadline);
-//	    values.put(TaskTable.COLUMN_UPDATED_AT, updated_at);
-//	    values.put(TaskTable.COLUMN_FINISHED_AT, finished_at);
-//	    values.put(TaskTable.COLUMN_PRIORITY, priority);
-//	    values.put(TaskTable.COLUMN_DIFFICULTY, difficulty);
-//	    values.put(TaskTable.COLUMN_TIME, time);
-//	    int finishedInt = 0;
-//	    if(finished) finishedInt = 1;
-//	    values.put(TaskTable.COLUMN_FINISHED, finishedInt);
-//	    values.put(TaskTable.COLUMN_STATE, state);
-//	    
-//	    if (id == null){
-//	    	Uri newTaskUri = context.getContentResolver().insert(TaskContentProvider.CONTENT_URI, values);
-//	    }else{
-//	    	Uri updateUri = Uri.parse(TaskContentProvider.CONTENT_URI + "/" + id);
-//		    context.getContentResolver().update(updateUri, values, null, null);
-//	    }
+		ContentValues values = new ContentValues();
+		values.put(GoalTable.COLUMN_ID, id);
+	    values.put(GoalTable.COLUMN_NAME, name);
+	    values.put(GoalTable.COLUMN_DESCRIPTION, description);
+	    values.put(GoalTable.COLUMN_POINTS, points);
+	    values.put(GoalTable.COLUMN_CREATED_AT, created_at);
+	    values.put(GoalTable.COLUMN_UPDATED_AT, updated_at);
+	    values.put(GoalTable.COLUMN_DEADLINE, deadline);
+	    int has_deadline_int = 0;
+	    if (has_deadline) has_deadline_int = 1;
+	    values.put(GoalTable.COLUMN_HAS_DEADLINE, has_deadline_int);
+	    values.put(GoalTable.COLUMN_BADGE, badge);
+	    values.put(GoalTable.COLUMN_COLOR, color);
+	    values.put(GoalTable.COLUMN_OWNER_ID, owner_id);
+	    values.put(GoalTable.COLUMN_PARENT_ID, parent_id);
+	    
+	    if (id == 0){
+	    	Uri newGoalUri = context.getContentResolver().insert(GoalContentProvider.CONTENT_URI, values);
+	    }else{
+	    	Uri updateUri = Uri.parse(GoalContentProvider.CONTENT_URI + "/" + id);
+		    context.getContentResolver().update(updateUri, values, null, null);
+	    }
 //	    
 	    // TODO
-	    // update task when done
+	    // update goal when done
 	}
 	
 	public void delete(Context context, Goal goal) {
-		int id = goal.getId();
+		long id = goal.getId();
 		Uri deleteUri = Uri.parse(GoalContentProvider.CONTENT_URI + "/" + id);
 		context.getContentResolver().delete(deleteUri, null, null);
 	}
@@ -96,7 +94,7 @@ public class Goal {
 //	    return task;
 //	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 

@@ -65,7 +65,7 @@ public class GoalContentProvider extends ContentProvider {
 	    switch (uriType) {
 	    case GOALS:
 //	    	ServiceHelper sHelper = ServiceHelper.getInstance();
-//	    	sHelper.startService(getContext(), ServiceHelper.GET_TASKS);
+//	    	sHelper.startService(getContext(), ServiceHelper.GET_GOALS);
 	    	break;
 	    case GOAL:
 	    	// Adding the ID to the original query
