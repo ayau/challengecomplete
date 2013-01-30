@@ -3,12 +3,17 @@ package com.challengecomplete.android.view;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 
@@ -27,6 +32,8 @@ public class ScrollView extends HorizontalScrollView{
 	private boolean scrolled; // detect single tap event
 	
 	private GestureDetector mGestureDetector;
+	private TranslateAnimation bounceAnimation;
+	
 	
 //	for measuring angle of gesture
 	private int oldX;
@@ -86,6 +93,9 @@ public class ScrollView extends HorizontalScrollView{
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent ev){
+		if (bounceAnimation != null)
+			bounceAnimation.cancel();
+		
 		switch(ev.getAction()){
 		case MotionEvent.ACTION_DOWN:
 			int x = (int) ev.getX();
@@ -121,6 +131,25 @@ public class ScrollView extends HorizontalScrollView{
 			scrolled = true;
 	}
 	
+	// When the bounce animation ends
+	@Override
+	protected void onAnimationEnd(){
+		super.onAnimationEnd();
+		ScrollView.this.scrollTo(openedX, 0);
+	}
+	
+	public void bounce(){
+		// Don't bounce if it's not fully opened
+		if (getScrollX() != openedX)
+			return;
+		
+		bounceAnimation = new TranslateAnimation(0, 40, 0, 0);
+		bounceAnimation.setInterpolator(new BounceInterpolator());
+		bounceAnimation.setDuration(800);
+	    ScrollView.this.scrollTo(openedX + 40, 0);
+	    startAnimation(bounceAnimation);
+	    invalidate();
+	}
 	
 	// Return true if we're scrolling in the x direction  
     class XScrollDetector extends SimpleOnGestureListener {

@@ -106,7 +106,10 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     public boolean onOptionsItemSelected(MenuItem item) {    
     	switch (item.getItemId()) {        
           case android.R.id.home:
-        	  mScrollView.open();         
+        	  if (mScrollView.isOpened())
+        		  mScrollView.bounce();
+        	  else
+        		  mScrollView.open();         
         	  return true;        
           default:            
         	  return super.onOptionsItemSelected(item);    
