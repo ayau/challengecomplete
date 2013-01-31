@@ -30,9 +30,7 @@ public class Media {
 	    paint.setAntiAlias(true);
 	    canvas.drawARGB(0, 0, 0, 0);
 	    paint.setColor(color);
-//	    paint.setShadowLayer(5, 0, 0, Color.BLACK);
 	    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-//	    paint.setShadowLayer(0, 0, 0, Color.BLACK);
 	    
 	    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
 	    canvas.drawBitmap(bitmap, rect, rect, paint);
@@ -43,12 +41,6 @@ public class Media {
 	    paint.setStrokeWidth((float) borderPx);
 	    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
 
-
-	    // draw border
-//	    paint.setColor(Color.BLACK);
-//	    paint.setStrokeWidth((float) 2);
-//	    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-	    
 	    return output;
 	  }
 	
@@ -81,7 +73,7 @@ public class Media {
 	    paint.setShadowLayer(3, 0, 0, color);
 	    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
 	    paint.setShadowLayer(0, 0, 0, Color.BLACK);
-	    Log.i("COLOR", colorString);
+	    
 	    paint.setColor(Color.parseColor("#" + colorString));
 	    canvas.drawRoundRect(iRectF, iRoundPx, iRoundPx, paint);
 	    canvas.drawPicture(pictureDrawable.getPicture(), pRect);
