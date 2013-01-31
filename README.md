@@ -5,7 +5,7 @@ This is a native android app started by [Alex Yau](https://github.com/ayau) for 
 
 Started Jan 24, 2013.
 
-TO DO
+##TO DO
     SVG loader
     caching bitmaps generated for badges
     update and sync system
