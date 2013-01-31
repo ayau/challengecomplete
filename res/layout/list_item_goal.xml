@@ -6,7 +6,7 @@
     android:padding="10dp" >
 
     <ImageView
-        android:id="@+id/goal_avatar"
+        android:id="@+id/goal_badge"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentLeft="true"
@@ -17,9 +17,9 @@
         android:id="@+id/goal_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/goal_avatar"
+        android:layout_alignTop="@+id/goal_badge"
+        android:layout_toRightOf="@+id/goal_badge"
+        android:paddingLeft="5dp"
         android:paddingTop="5dp"
         android:text="Learn to write with left hand"
         android:textSize="16dp"
