@@ -57,7 +57,7 @@ public class Media {
 	    
 	    final Rect rect = new Rect(margin, margin, width - margin, width - margin);
 	    final Rect iRect = new Rect(margin + padding, margin + padding, width - margin - padding, width - margin - padding);
-	    final Rect pRect = new Rect(badgeMargin, badgeMargin, width - badgeMargin, width - badgeMargin);
+//	    final Rect pRect = new Rect(badgeMargin, badgeMargin, width - badgeMargin, width - badgeMargin);
 	    
 	    final RectF iRectF = new RectF(iRect);
 	    final RectF rectF = new RectF(rect);
@@ -66,6 +66,30 @@ public class Media {
 	    final float roundPx = width - margin* 2;
 
 	    paint.setAntiAlias(true);
+	    
+	    // svg dimensions
+	    int svgWidth = pictureDrawable.getPicture().getWidth();
+	    int svgHeight = pictureDrawable.getPicture().getHeight();
+	    int xOffset = 0;
+	    int yOffset = 0;
+	    
+	    int svgMaxWidth = width - badgeMargin*2;
+	    if (svgWidth > svgHeight){
+	    	float ratio = ((float) svgHeight)/svgWidth;
+	    	svgWidth = svgMaxWidth;
+	    	svgHeight = (int) (svgMaxWidth*ratio);
+	    	yOffset = (svgWidth - svgHeight)/2;
+	    } else {
+	    	float ratio = ((float) svgWidth)/svgHeight;
+	    	svgHeight = svgMaxWidth;
+	    	svgWidth = (int) (svgMaxWidth*ratio);
+	    	xOffset = (svgHeight - svgWidth)/2;
+	    }
+	    
+	    Rect svgRect = new Rect(xOffset + badgeMargin,
+	    		yOffset + badgeMargin,
+	    		xOffset + svgWidth + badgeMargin,
+	    		yOffset + svgHeight + badgeMargin);   
 	    
 	    // draw border
 	    paint.setColor(Color.WHITE);
@@ -76,7 +100,7 @@ public class Media {
 	    
 	    paint.setColor(Color.parseColor("#" + colorString));
 	    canvas.drawRoundRect(iRectF, iRoundPx, iRoundPx, paint);
-	    canvas.drawPicture(pictureDrawable.getPicture(), pRect);
+	    canvas.drawPicture(pictureDrawable.getPicture(), svgRect);
 	    
 	    return output;
 	}

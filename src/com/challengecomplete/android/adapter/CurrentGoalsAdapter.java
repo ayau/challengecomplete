@@ -6,8 +6,9 @@ import java.io.InputStream;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
+import android.os.AsyncTask;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.challengecomplete.android.R;
+import com.challengecomplete.android.service.HttpCaller;
 import com.challengecomplete.android.utils.BitmapCache;
 import com.challengecomplete.android.utils.Media;
 import com.larvalabs.svgandroid.SVG;
@@ -39,20 +41,21 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 		 
 		ViewHolder holder = (ViewHolder) view.getTag();
 		holder.name.setText(name);
+		holder.badge.setTag(id);
+		
+		if (name.equals("guitar"))
+		Log.i("BADGE", badge);
 		
 		// Check cache first
 		Bitmap bitmap = mBitmapCache.getBitmapFromMemCache(id + "");
 		
 		if (bitmap == null){
-			String p = "<svg version=\"1.0\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" width=\"100px\" height=\"95.105px\" viewBox=\"0 0 100 95.105\" enable-background=\"new 0 0 100 95.105\" xml:space=\"preserve\"><polygon points=\"50,0 61.803,36.327 100,36.327 69.098,58.778 80.902,95.105 50,72.654 19.098,95.105 30.902,58.778 0,36.327 38.197,36.327 \"></polygon></svg>";
-			InputStream is = new ByteArrayInputStream(p.getBytes());
-			SVG svg = SVGParser.getSVGFromInputStream(is);
-	
-			bitmap = Media.getBadgeBitmap(context, svg.createPictureDrawable(), color);
-			mBitmapCache.addBitmapToMemoryCache(id + "", bitmap);
+			holder.badge.setImageResource(R.drawable.ic_launcher);
+			BitmapWorkerTask task = new BitmapWorkerTask(id, holder.badge, badge, color);
+	        task.execute(id);
+		} else {
+			holder.badge.setImageBitmap(bitmap);
 		}
-		
-		holder.badge.setImageBitmap(bitmap);
 		
 		holder.square.setOnClickListener(new OnClickListener(){
 
@@ -62,6 +65,47 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 				toast.show();
 			}
 		});
+	}
+	
+	class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
+	    private ImageView imageView;
+	    private String badge;
+	    private String color;
+	    private int id;
+	    
+		public BitmapWorkerTask(int id, ImageView imageView, String badge, String color) {
+			this.id = id;
+			this.imageView = imageView;
+			this.badge = badge;
+			this.color = color;
+		}
+
+		// Decode image in background.
+	    @Override
+	    protected Bitmap doInBackground(Integer... params) {
+//	    	Log.i("BADGE IS", badge);
+	    	String svgString = HttpCaller.getRequest(imageView.getContext(), badge);
+	    	
+	    	String svgColor = badge.substring(badge.length() - 6);
+	    	
+	    	svgString = svgString.replaceAll("fill=\"#000000\"", "");
+	    	svgString = svgString.replaceAll("<polygon", "<polygon fill=\"#" + svgColor + "\"");
+	    	svgString = svgString.replaceAll("<path", "<path fill=\"#" + svgColor + "\"");
+	    	svgString = svgString.replaceAll("<rect", "<rect fill=\"#" + svgColor + "\"");
+	    	
+	    	InputStream is = new ByteArrayInputStream(svgString.getBytes());
+			SVG svg = SVGParser.getSVGFromInputStream(is);
+			Bitmap bitmap = Media.getBadgeBitmap(imageView.getContext(), svg.createPictureDrawable(), color);
+			mBitmapCache.addBitmapToMemoryCache(params[0] + "", bitmap);
+	    	
+			return bitmap;
+	    }
+	    
+	    @Override
+	    protected void onPostExecute(Bitmap result) {
+	    	if (((Integer) imageView.getTag()) == id)
+	    		imageView.setImageBitmap(result);
+	     }
 	}
 
 	@Override

@@ -18,8 +18,7 @@ public class BitmapCache {
 	    mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
 	        @Override
 	        protected int sizeOf(String key, Bitmap bitmap) {
-	            // The cache size will be measured in kilobytes rather than
-	            // number of items.
+	            // The cache size will be measured in kilobytes rather than number of items.
 	            return bitmap.getByteCount() / 1024;
 	        }
 	    };
