@@ -1,5 +1,8 @@
 package com.challengecomplete.android.fragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -9,6 +12,9 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.adapter.CurrentGoalsAdapter;
@@ -24,7 +30,14 @@ public class CurrentGoalsFragment extends ListFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mAdapter = new CurrentGoalsAdapter(getActivity(), null);
+
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		View header = inflater.inflate(R.layout.list_header_goal, null, false);
+		TextView dateText = (TextView) header.findViewById(R.id.current_day);;
+		dateText.setText(getDayOfMonthString());
+		getListView().addHeaderView(header);
+		
+		mAdapter = new CurrentGoalsAdapter(getActivity(), null);  
 		setListAdapter(mAdapter);
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 	}
@@ -32,6 +45,7 @@ public class CurrentGoalsFragment extends ListFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.fragment_currentgoals, container, false);
+		
 		return root;
 	}
 
@@ -50,5 +64,25 @@ public class CurrentGoalsFragment extends ListFragment implements
 	public void onLoaderReset(Loader<Cursor> loader) {
 		mAdapter.swapCursor(null);
 	}
+	
+	// Returns a string in the format of "Feburary 2013 (Day 7 of 28)" based on current date
+	public String getDayOfMonthString(){
+		Calendar calendar = Calendar.getInstance();
+		int numDays = calendar.getActualMaximum(Calendar.DATE);
+		SimpleDateFormat month_date = new SimpleDateFormat("MMMMMMMMM");
+		String month_name = month_date.format(calendar.getTime());
+		
+		return month_name + " " + calendar.get(Calendar.YEAR) 
+				+ " (Day " + calendar.get(Calendar.DAY_OF_MONTH) 
+				+ " of " + numDays + ")";
+
+	}
+	
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+        Toast.makeText(v.getContext(), id + " selected", Toast.LENGTH_SHORT).show();
+    }
+
 
 }
