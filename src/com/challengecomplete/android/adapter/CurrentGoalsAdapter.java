@@ -60,7 +60,6 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 	
 	@Override
 	public View newView(Context context, Cursor c, ViewGroup parent) {
-		Log.i("NEW VIEW", "NEW");
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View v = inflater.inflate(R.layout.list_item_goal, parent, false);
 		ViewHolder holder = new ViewHolder();
