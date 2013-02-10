@@ -51,6 +51,8 @@ public class SvgLoader {
 	    @Override
 	    protected Bitmap doInBackground(Integer... params) {
 	    	String svgString = HttpCaller.getRequest(context, badge);
+	    	if (svgString == null)
+	    		return null;
 	    	
 	    	String svgColor = badge.substring(badge.length() - 6);
 	    	
@@ -70,7 +72,8 @@ public class SvgLoader {
 	    @Override
 	    protected void onPostExecute(Bitmap result) {
 	    	workers.remove(id);
-	    	adapter.notifyDataSetChanged();
+	    	if (result != null)
+	    		adapter.notifyDataSetChanged();
 	     }
 	}
 

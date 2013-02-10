@@ -3,7 +3,9 @@
 
     <color name="background">#FEFEFE</color>
     <color name="side_background">#F0F0F0</color>
+    <color name="actionbar_border">#DDD</color>
     <color name="accent">#4183c4</color>
     <color name="gray">#CCC</color>
-
+	<color name="google_blue">#33B5E5</color>
+	<color name="google_blue_dark">#0099CC</color>
 </resources>

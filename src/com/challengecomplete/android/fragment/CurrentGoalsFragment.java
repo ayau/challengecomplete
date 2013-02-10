@@ -12,6 +12,8 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,11 +23,11 @@ import com.challengecomplete.android.adapter.CurrentGoalsAdapter;
 import com.challengecomplete.android.models.goals.GoalContentProvider;
 import com.challengecomplete.android.models.goals.GoalTable;
 
-public class CurrentGoalsFragment extends ListFragment implements
-		LoaderCallbacks<Cursor> {
+public class CurrentGoalsFragment extends ListFragment implements LoaderCallbacks<Cursor> {
 
 	private final static int LOADER_ID = 0x01;
 	private CurrentGoalsAdapter mAdapter;
+	//private boolean actionBarShowing = false;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -45,7 +47,6 @@ public class CurrentGoalsFragment extends ListFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.fragment_currentgoals, container, false);
-		
 		return root;
 	}
 
@@ -83,6 +84,28 @@ public class CurrentGoalsFragment extends ListFragment implements
 	public void onListItemClick(ListView l, View v, int position, long id) {
         Toast.makeText(v.getContext(), id + " selected", Toast.LENGTH_SHORT).show();
     }
-
-
+	
+	// Currently not in use
+	/**
+	public void showActionbarBottom(){
+		View v = getView().findViewById(R.id.actionbar_bottom);
+		v.setVisibility(View.VISIBLE);
+		TranslateAnimation slide = new TranslateAnimation(0, 0, 100, 0);   
+		slide.setDuration(200);   
+		slide.setFillAfter(true);
+		v.startAnimation(slide);
+		actionBarShowing = true;
+	}
+	
+	public void hideActionbarBottom(){
+		View v = getView().findViewById(R.id.actionbar_bottom);
+		v.clearAnimation();
+		v.setVisibility(View.GONE);
+		actionBarShowing = false;
+	}
+	
+	public boolean getActionBarShowing(){
+		return actionBarShowing;
+	}
+	**/
 }

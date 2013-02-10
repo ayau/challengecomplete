@@ -14,12 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.challengecomplete.android.R;
+import com.challengecomplete.android.fragment.CurrentGoalsFragment;
 import com.challengecomplete.android.utils.BitmapCache;
 import com.challengecomplete.android.utils.SvgLoader;
 
 public class CurrentGoalsAdapter extends CursorAdapter {
 	private BitmapCache mBitmapCache;
 	private SvgLoader svgLoader;
+	private int selected;
 	
 	public CurrentGoalsAdapter(Context context, Cursor c) {
 		super(context, c, 0);
@@ -48,14 +50,23 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 			holder.badge.setImageBitmap(bitmap);
 		}
 		
-		holder.square.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				Toast toast = Toast.makeText(v.getContext(), "square selected", Toast.LENGTH_SHORT);
-				toast.show();
+		if (selected == id){
+			if (view.getBackground() == null){
+				int bottom = view.getPaddingBottom();
+			    int top = view.getPaddingTop();
+			    int right = view.getPaddingRight();
+			    int left = view.getPaddingLeft();
+				view.setBackgroundResource(R.drawable.goalselected);
+				view.setPadding(left, top, right, bottom);
+				view.layout(0, 0, view.getRight(), view.getHeight());
 			}
-		});
+		} else {
+			view.setBackgroundResource(0);
+		}
+		
+		holder.square.setActivated(selected == id);
+		holder.square.setTag(id);
+		
 	}
 	
 	@Override
@@ -67,7 +78,21 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 		holder.badge = (ImageView) v.findViewById(R.id.goal_badge);
 		holder.square = (ImageView) v.findViewById(R.id.square);
 		v.setTag(holder);
-//		bindView(v, context, c);
+		
+		holder.square.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {;
+				if (selected == (Integer) v.getTag()){
+					selected = 0;
+					v.setActivated(false);
+					CurrentGoalsAdapter.this.notifyDataSetChanged();
+				} else{
+					selected = (Integer) v.getTag();
+					CurrentGoalsAdapter.this.notifyDataSetChanged();
+				}
+			}
+		});
+		
 		return v;
 	}
 
