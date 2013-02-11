@@ -1,53 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="5dp" >
+    android:layout_height="80dp" >
+
+    <View
+        android:id="@+id/goal_background_active"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="80dp"
+        android:background="@drawable/goalselected"
+        android:visibility="gone" >
+    </View>
+
+    <RelativeLayout
+        android:id="@+id/goal_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="5dp"
+        android:paddingLeft="80dp"
+        android:paddingTop="5dp" >
+
+        <TextView
+            android:id="@+id/goal_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/goal_badge"
+            android:layout_toLeftOf="@+id/square"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:text="Learn to write with left hand"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/goal_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/goal_name"
+            android:layout_toLeftOf="@+id/square"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:text="10 pts"
+            android:textColor="@color/gray"
+            android:textSize="14dp" />
+
+        <!-- Width and Height is 30 -->
+
+        <ImageView
+            android:id="@+id/square"
+            android:layout_width="50dp"
+            android:layout_height="70dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingBottom="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="20dp"
+            android:src="@drawable/square" />
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/goal_badge"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        android:padding="5dp"
         android:src="@drawable/ic_launcher" />
 
-    <TextView
-        android:id="@+id/goal_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/goal_badge"
-        android:layout_toLeftOf="@+id/square"
-        android:layout_toRightOf="@+id/goal_badge"
-        android:paddingLeft="5dp"
-        android:paddingTop="10dp"
-        android:text="Learn to write with left hand"
-        android:textSize="16dp" />
-
-    <TextView
-        android:id="@+id/goal_points"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/goal_name"
-        android:layout_toLeftOf="@+id/square"
-        android:layout_toRightOf="@+id/goal_badge"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:text="10 pts"
-        android:textColor="@color/gray"
-        android:textSize="14dp" />
-
-    <!-- Width and Height is 30 -->
-    <ImageView
-        android:id="@+id/square"
-        android:layout_width="45dp"
-        android:layout_height="70dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:paddingBottom="20dp"
-        android:paddingRight="5dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="20dp"
-        android:src="@drawable/square" />
-
-</RelativeLayout>
+</FrameLayout>

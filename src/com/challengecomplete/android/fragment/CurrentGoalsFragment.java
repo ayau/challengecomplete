@@ -76,14 +76,13 @@ public class CurrentGoalsFragment extends ListFragment implements LoaderCallback
 		return month_name + " " + calendar.get(Calendar.YEAR) 
 				+ " (Day " + calendar.get(Calendar.DAY_OF_MONTH) 
 				+ " of " + numDays + ")";
-
 	}
 	
 	
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-        Toast.makeText(v.getContext(), id + " selected", Toast.LENGTH_SHORT).show();
-    }
+//	@Override
+//	public void onListItemClick(ListView l, View v, int position, long id) {
+//        Toast.makeText(v.getContext(), id + " selected", Toast.LENGTH_SHORT).show();
+//    }
 	
 	// Currently not in use
 	/**
