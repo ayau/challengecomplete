@@ -9,14 +9,13 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.adapter.CurrentGoalsAdapter;
@@ -42,6 +41,20 @@ public class CurrentGoalsFragment extends ListFragment implements LoaderCallback
 		mAdapter = new CurrentGoalsAdapter(getActivity(), null);  
 		setListAdapter(mAdapter);
 		getLoaderManager().initLoader(LOADER_ID, null, this);
+		
+		getListView().setOnScrollListener(new OnScrollListener(){
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+			}
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				mAdapter.deselect();
+			}
+			
+		});
 	}
 
 	@Override

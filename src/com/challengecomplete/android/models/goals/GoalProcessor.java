@@ -5,6 +5,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.net.Uri;
 
 
 public class GoalProcessor {
@@ -78,4 +80,11 @@ public class GoalProcessor {
 	    	    
 	    return values;
 	}
+	
+	
+	public static void delete(Context context, long id) {
+		Uri deleteUri = Uri.parse(GoalContentProvider.CONTENT_URI + "/" + id);
+		context.getContentResolver().delete(deleteUri, null, null);
+	}
+	
 }
