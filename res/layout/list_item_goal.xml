@@ -11,45 +11,84 @@
         android:paddingLeft="80dp"
         android:visibility="gone" >
 
-        <TextView
+        <LinearLayout
             android:id="@+id/goal_giveup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="Give up"
-            android:textColor="@color/dark_gray"
-            android:textSize="16dp" />
+            android:paddingTop="10dp" >
 
-        <TextView
-            android:id="@+id/goal_complete"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:src="@drawable/bucket" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Give up"
+                android:textColor="@color/dark_gray"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/goal_compelte"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:gravity="center"
+            android:orientation="vertical"
             android:paddingBottom="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:text="Complete"
-            android:textColor="@color/dark_gray"
-            android:textSize="16dp" />
+            android:paddingTop="10dp" >
 
-        <TextView
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:src="@drawable/complete" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Complete"
+                android:textColor="@color/dark_gray"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/goal_event"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:gravity="right"
+            android:orientation="vertical"
             android:paddingBottom="10dp"
             android:paddingRight="15dp"
-            android:paddingTop="10dp"
-            android:text="I did it!"
-            android:textColor="@color/dark_gray"
-            android:textSize="16dp" />
+            android:paddingTop="10dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:paddingBottom="2dp"
+                android:paddingTop="3dp"
+                android:src="@drawable/plusone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="I did it!"
+                android:textColor="@color/dark_gray"
+                android:textSize="12dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
