@@ -34,7 +34,7 @@ public class HttpCaller {
 				
 		String token = ChallengeComplete.getToken(context);
 		long since = ChallengeComplete.getLastSynced(context); // only for sync
-		
+
 		// TODO
 		// Switch to namevaluepair later
 		// Careful we have ?ftoken=xxx in path

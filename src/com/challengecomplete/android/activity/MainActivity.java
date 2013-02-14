@@ -23,6 +23,8 @@ import com.challengecomplete.android.fragment.CurrentGoalsFragment;
 import com.challengecomplete.android.fragment.SideFragment;
 import com.challengecomplete.android.models.goals.GoalContentProvider;
 import com.challengecomplete.android.models.goals.GoalProcessor;
+import com.challengecomplete.android.models.goals.GoalProcessor.SyncContentValues;
+import com.challengecomplete.android.models.goals.GoalTable;
 import com.challengecomplete.android.service.APIService;
 import com.challengecomplete.android.service.ServiceHelper;
 import com.challengecomplete.android.service.ServiceReceiver;
@@ -168,16 +170,30 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 	        syncGoals();
 			
 		} else if (taskId == syncId){
-			ContentValues[] contentValues = GoalProcessor.bulkCreateContentValues(results);
-			if (contentValues != null && contentValues.length > 0)
-				getContentResolver().bulkInsert(GoalContentProvider.CONTENT_URI, contentValues);
-			
-			ChallengeComplete.setLastSynced(this,  new Date().getTime());
-			// TODO
-			// Notify Processor.
-			// getProcessor by Id -> runTask (GET_TASKS) to update database
-//			getContentResolver()
-			
+			if (results != null) {
+				SyncContentValues contentValues = GoalProcessor.bulkCreateContentValues(results);
+				
+				ContentValues[] createdContentValues = contentValues.created;
+				ContentValues[] updatedContentValues = contentValues.updated;
+				
+				if (createdContentValues != null && createdContentValues.length > 0)
+					getContentResolver().bulkInsert(GoalContentProvider.CONTENT_URI, createdContentValues);
+				
+				if (updatedContentValues != null){
+					for (int i = 0; i < updatedContentValues.length; i++){
+						ContentValues cv = updatedContentValues[i];
+						getContentResolver().update(GoalContentProvider.CONTENT_URI, 
+								updatedContentValues[i], GoalTable.COLUMN_ID + "=" + cv.get(GoalTable.COLUMN_ID), null);
+					}
+				}
+				
+				
+				ChallengeComplete.setLastSynced(this,  new Date().getTime()/1000);
+				// TODO
+				// Notify Processor.
+				// getProcessor by Id -> runTask (GET_TASKS) to update database
+	//			getContentResolver()
+			}	
 			syncId = -1;
 		}
 		

@@ -1,5 +1,7 @@
 package com.challengecomplete.android.models.goals;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,11 +28,23 @@ public class GoalProcessor {
 	public final static String IS_CURRENT = "is_current";
 	public final static String STATUS = "status";
 	
-	public static ContentValues[] bulkCreateContentValues(String results){
+	public final static String STATUS_CREATED = "created";
+	public final static String STATUS_UPDATED = "updated";
+	
+	public static class SyncContentValues{
+		public ContentValues[] created = null;
+		public ContentValues[] updated = null;
+	}
+	
+	public static SyncContentValues bulkCreateContentValues(String results){
+		SyncContentValues syncContentValues = new SyncContentValues();
+		
 		JSONArray json;
 		try {
 			json = new JSONArray(results);
-			ContentValues[] contentValues = new ContentValues[json.length()];
+			ArrayList<ContentValues> created = new ArrayList<ContentValues>();
+//			ContentValues[] contentValues = new ContentValues[json.length()];
+			ArrayList<ContentValues> updated = new ArrayList<ContentValues>();
 			
 			for (int i = 0; i < json.length(); i++){
 				JSONObject o = json.getJSONObject(i);
@@ -52,10 +66,21 @@ public class GoalProcessor {
 				ContentValues cv = createContentValues(id, name, description, points, created_at, updated_at, deadline, 
 						has_deadline, badge, color, owner_id, parent_id, is_current);
 				
-				contentValues[i] = cv;
+				if (status.equals(STATUS_CREATED)){
+					created.add(cv);
+				} else if (status.equals(STATUS_UPDATED)){
+					updated.add(cv);
+				}
+//				contentValues[i] = cv;
 			}
-		
-			return contentValues;
+			
+			if (created.size() > 0)
+				syncContentValues.created = created.toArray(new ContentValues[created.size()]);
+			if (updated.size() > 0)
+				syncContentValues.updated = updated.toArray(new ContentValues[created.size()]);
+			
+			return syncContentValues;
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

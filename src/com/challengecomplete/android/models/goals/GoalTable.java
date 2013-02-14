@@ -18,10 +18,6 @@ public class GoalTable {
 	public final static String COLUMN_PARENT_ID = "parent_id";
 	public final static String COLUMN_IS_CURRENT = "is_current";
 	
-//	public final static String STATE_UPDATING = "updating";
-//	public final static String STATE_DELETING = "deleting";
-//	public final static String STATE_POSTING = "posting";
-	
 	public final static String[] allColumns = {
 		COLUMN_ID,				// 0
 		COLUMN_NAME,			// 1
