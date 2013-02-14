@@ -35,7 +35,7 @@ public class ServiceHelper{
 	// Operations available
 	public static final int LOGIN = 0x00;
 	public static final int GET_ME = 0x01;
-	public static final int GET_CURRENT_GOALS = 0x02;
+	public static final int SYNC = 0x02;
 	
 	private SparseArray<ResultReceiver> receivers;
 	

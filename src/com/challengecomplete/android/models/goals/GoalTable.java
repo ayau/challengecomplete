@@ -16,10 +16,11 @@ public class GoalTable {
 	public final static String COLUMN_COLOR = "color";
 	public final static String COLUMN_OWNER_ID = "owner_id";
 	public final static String COLUMN_PARENT_ID = "parent_id";
+	public final static String COLUMN_IS_CURRENT = "is_current";
 	
-	public final static String STATE_UPDATING = "updating";
-	public final static String STATE_DELETING = "deleting";
-	public final static String STATE_POSTING = "posting";
+//	public final static String STATE_UPDATING = "updating";
+//	public final static String STATE_DELETING = "deleting";
+//	public final static String STATE_POSTING = "posting";
 	
 	public final static String[] allColumns = {
 		COLUMN_ID,				// 0
@@ -33,7 +34,8 @@ public class GoalTable {
 		COLUMN_BADGE,			// 8
 		COLUMN_COLOR,			// 9
 		COLUMN_OWNER_ID,		// 10
-		COLUMN_PARENT_ID		// 11
+		COLUMN_PARENT_ID,		// 11
+		COLUMN_IS_CURRENT		// 12
 	};
 	
 	// Database creation sql statement
@@ -50,7 +52,8 @@ public class GoalTable {
 		  + COLUMN_BADGE + " text not null, "
 		  + COLUMN_COLOR + " text not null, "
 		  + COLUMN_OWNER_ID + " integer not null, "
-		  + COLUMN_PARENT_ID + " integer not null);";
+		  + COLUMN_PARENT_ID + " integer not null, "
+		  + COLUMN_IS_CURRENT + " integer not null);";
 	
 	public static void onCreate(SQLiteDatabase database) {
 		database.execSQL(DATABASE_CREATE);

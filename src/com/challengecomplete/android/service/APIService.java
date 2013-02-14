@@ -62,13 +62,13 @@ public class APIService extends IntentService {
 
 			break;
 
-		case ServiceHelper.GET_CURRENT_GOALS:
-			Log.i(TAG, "Get current goals");
+		case ServiceHelper.SYNC:
+			Log.i(TAG, "sync");
 			
 			int id = ChallengeComplete.getUserId(this);
 			if (id == 0) return;
 			
-			results = HttpCaller.getRequest(this, "/users/" + id + "/goals/current");
+			results = HttpCaller.getRequest(this, "/users/" + id + "/goals/sync");
 			
 			bundle.putString(RESULTS, results);
 			

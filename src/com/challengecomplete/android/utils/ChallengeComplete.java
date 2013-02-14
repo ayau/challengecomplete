@@ -26,6 +26,9 @@ public class ChallengeComplete {
 	private static final String KEY_USER_POINTS_TOTAL = "user_points_total";
 	private static final String KEY_USER_POINTS_MONTH = "user_points_month";
 	
+	// Sync
+	private static final String KEY_LAST_SYNCED = "last_synced";
+	
 	
 	public static boolean isLoggedIn(Context context){
 		SharedPreferences pref = getSharedPreferences(context);
@@ -99,6 +102,15 @@ public class ChallengeComplete {
 		writeIntPreferences(context, KEY_USER_POINTS_MONTH, points);
 	}
 	
+	public static long getLastSynced(Context context){
+		SharedPreferences pref = getSharedPreferences(context);
+		return pref.getLong(KEY_LAST_SYNCED, 0);
+	}
+	
+	public static void setLastSynced(Context context, long time){
+		writeLongPreferences(context, KEY_LAST_SYNCED, time);
+	}
+	
 	
 	// Helper methods
 	public static SharedPreferences getSharedPreferences (Context context) {
@@ -133,6 +145,14 @@ public class ChallengeComplete {
 		editor.commit();
 	}
 	
+	private static void writeLongPreferences(Context context, String name, long value){
+		SharedPreferences pref = getSharedPreferences(context);
+		Editor editor = pref.edit();
+		
+		editor.putLong(name, value);
+		
+		editor.commit();
+	}
 	
 	// Other utils
 	public static ProgressDialog showDialog(Context context) {

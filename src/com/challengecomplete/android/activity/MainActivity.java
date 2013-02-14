@@ -1,5 +1,7 @@
 package com.challengecomplete.android.activity;
 
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,7 +40,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 	private ProgressDialog mProgressDialog;
 	
 	private int fetchMeId = -1;
-	private int fetchCurrentGoalsId = -1;
+	private int syncId = -1;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +91,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     
     public void fetch(){
     	fetchMe();
-        fetchCurrentGoals();
+//        syncGoals();
     }
     
     public void fetchMe(){
@@ -108,14 +110,14 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     	Log.i(TAG, "TaskId: " + taskId);
 	}
     
-    public void fetchCurrentGoals(){
+    public void syncGoals(){
     	Bundle extras = new Bundle();
 		extras.putParcelable(ServiceReceiver.NAME, (Parcelable) mReceiver);
 		
         ServiceHelper mServiceHelper = ServiceHelper.getInstance();
-    	int taskId = mServiceHelper.startService(this, ServiceHelper.GET_CURRENT_GOALS, extras);
+    	int taskId = mServiceHelper.startService(this, ServiceHelper.SYNC, extras);
     	
-    	fetchCurrentGoalsId = taskId;
+    	syncId= taskId;
     	
     	Log.i(TAG, "TaskId: " + taskId);
     }
@@ -162,17 +164,21 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 			
 			fetchMeId = -1;
 			
-		} else if (taskId == fetchCurrentGoalsId){
+			// Sync after fetch
+	        syncGoals();
+			
+		} else if (taskId == syncId){
 			ContentValues[] contentValues = GoalProcessor.bulkCreateContentValues(results);
 			if (contentValues != null && contentValues.length > 0)
 				getContentResolver().bulkInsert(GoalContentProvider.CONTENT_URI, contentValues);
 			
+			ChallengeComplete.setLastSynced(this,  new Date().getTime());
 			// TODO
 			// Notify Processor.
 			// getProcessor by Id -> runTask (GET_TASKS) to update database
 //			getContentResolver()
 			
-			fetchCurrentGoalsId = -1;
+			syncId = -1;
 		}
 		
 		ChallengeComplete.dismissDialog(mProgressDialog);

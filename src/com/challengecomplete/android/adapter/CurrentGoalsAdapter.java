@@ -28,12 +28,10 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 	private int selected;
 	private View selectedView;
 	private Cursor cursor;
-	private Context context;
 	
 	public CurrentGoalsAdapter(Context context, Cursor c) {
 		super(context, c, 0);
 		cursor = c;
-		this.context = context;
 		mBitmapCache = new BitmapCache();
 		svgLoader = new SvgLoader(context, this, mBitmapCache);
 	}
@@ -100,6 +98,8 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 		goalContainer.setTag(false);
 		final View badge = holder.badge;
 		
+		// TODO
+		// refactor onClickListeners
 		holder.square.setOnClickListener(new OnClickListener(){
 			
 			@Override
@@ -183,6 +183,8 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 	}
 	
 	public void deselect(){
+		// TODO
+		// Refactor selectedView
 		if (selectedView == null) return;
 		
 		ViewHolder holder = (ViewHolder) selectedView.getTag();
@@ -212,10 +214,9 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 		selectedView = null;
 		selected = 0;
 	}
-	
-	
-	
 
+	// TODO
+	// refactor animation
 	public class FoldUpAnimation extends Animation {
 
 		int mFromHeight;

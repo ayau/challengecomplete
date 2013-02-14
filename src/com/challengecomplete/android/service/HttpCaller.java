@@ -15,6 +15,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.challengecomplete.android.utils.ChallengeComplete;
 
@@ -32,11 +33,20 @@ public class HttpCaller {
 		String url = HOST + path;
 				
 		String token = ChallengeComplete.getToken(context);
-		if (token != null) {
-			// Switch to namevaluepair later
-			url += "?token=" + token;
-		}
+		long since = ChallengeComplete.getLastSynced(context); // only for sync
 		
+		// TODO
+		// Switch to namevaluepair later
+		// Careful we have ?ftoken=xxx in path
+		if (token != null){
+			url += "?token=" + token;
+
+			// TODO
+			// Have APIService pass in parameters
+			url += "&since=" + since;		
+				
+		}
+			
 		// Prepare a request object
 		HttpGet httpget = new HttpGet(url);
 

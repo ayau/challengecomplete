@@ -23,6 +23,8 @@ public class GoalProcessor {
 	public final static String COLOR = "color";
 	public final static String OWNER_ID = "owner_id";
 	public final static String PARENT_ID = "parent_id";
+	public final static String IS_CURRENT = "is_current";
+	public final static String STATUS = "status";
 	
 	public static ContentValues[] bulkCreateContentValues(String results){
 		JSONArray json;
@@ -44,11 +46,11 @@ public class GoalProcessor {
 				String color = o.getString(COLOR);
 				int owner_id = o.getInt(OWNER_ID);
 				int parent_id = o.getInt(PARENT_ID);
-				
-//				String status = ServiceHelper.STATUS_OK;
+				int is_current = o.optInt(IS_CURRENT, 0);
+				String status = o.getString(STATUS);
 				
 				ContentValues cv = createContentValues(id, name, description, points, created_at, updated_at, deadline, 
-						has_deadline, badge, color, owner_id, parent_id);
+						has_deadline, badge, color, owner_id, parent_id, is_current);
 				
 				contentValues[i] = cv;
 			}
@@ -62,7 +64,7 @@ public class GoalProcessor {
 
 	public static ContentValues createContentValues(int id, String name, String description, int points,
 			long created_at, long updated_at, String deadline, 
-			int has_deadline, String badge, String color, int owner_id, int parent_id){ // state
+			int has_deadline, String badge, String color, int owner_id, int parent_id, int is_current){ // state
 		
 		ContentValues values = new ContentValues();
 		values.put(GoalTable.COLUMN_ID, id);
@@ -77,6 +79,7 @@ public class GoalProcessor {
 	    values.put(GoalTable.COLUMN_COLOR, color);
 	    values.put(GoalTable.COLUMN_OWNER_ID, owner_id);
 	    values.put(GoalTable.COLUMN_PARENT_ID, owner_id);
+	    values.put(GoalTable.COLUMN_IS_CURRENT, is_current);
 	    	    
 	    return values;
 	}
