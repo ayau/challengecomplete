@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.challengecomplete.android.R;
+import com.challengecomplete.android.activity.MainActivity;
 import com.challengecomplete.android.utils.ChallengeComplete;
 import com.challengecomplete.android.utils.Media;
 import com.google.android.imageloader.ImageLoader;
@@ -53,11 +54,11 @@ public class SideFragment extends ListFragment{
 		
 		ArrayList<MenuItem> menu = new ArrayList<MenuItem>();
 
-		MenuItem new_goal = new MenuItem("New Goal");
-		MenuItem current = new MenuItem("Current Goals");
-		MenuItem bucket = new MenuItem("In my Bucket");
-		MenuItem achievements = new MenuItem("Achievements");
-		MenuItem notifications = new MenuItem("Notifications");
+		MenuItem new_goal = new MenuItem("New Goal", 0);
+		MenuItem current = new MenuItem("Current Goals", MainActivity.FRAGMENT_CURRENTGOALS);
+		MenuItem bucket = new MenuItem("In my Bucket", MainActivity.FRAGMENT_BUCKETGOALS);
+		MenuItem achievements = new MenuItem("Achievements", 0);
+		MenuItem notifications = new MenuItem("Notifications", 0);
 		
 		menu.add(new_goal);
 		menu.add(current);
@@ -100,6 +101,12 @@ public class SideFragment extends ListFragment{
 			
 		}
 	};
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id){
+		int fragmentId = ((MenuItem) l.getItemAtPosition(position)).id;
+		if (fragmentId > 0) ((MainActivity) getActivity()).switchFragment(fragmentId);
+	}
 	
 	public class MenuListAdapter extends ArrayAdapter<MenuItem>{
 		ArrayList<MenuItem> menu;
@@ -146,9 +153,11 @@ public class SideFragment extends ListFragment{
 	}
 	
 	private class MenuItem {
+		int id; // Fragment Id
 		String title;
-		public MenuItem(String title){
+		public MenuItem(String title, int id){
 			this.title = title;
+			this.id = id;
 		}
 	}
 	

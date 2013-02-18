@@ -47,13 +47,13 @@ public class ScrollView extends HorizontalScrollView{
 		setOverScrollMode(View.OVER_SCROLL_NEVER);
 		setHorizontalFadingEdgeEnabled(false);
 		
-		ViewTreeObserver viewTreeObserver = getViewTreeObserver();
-		viewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener(){
-			@Override
-			public void onGlobalLayout() {
-				ScrollView.this.scrollTo(width*5/6, 0);
-			}
-		});
+//		ViewTreeObserver viewTreeObserver = getViewTreeObserver();
+//		viewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener(){
+//			@Override
+//			public void onGlobalLayout() {
+//				ScrollView.this.scrollTo(width*5/6, 0);
+//			}
+//		});
 		
 		mGestureDetector = new GestureDetector(context, new XScrollDetector());
 	}
@@ -183,5 +183,26 @@ public class ScrollView extends HorizontalScrollView{
 	public void open(){
 		smoothScrollTo(openedX, 0);
 		((Activity) this.getContext()).getActionBar().setDisplayHomeAsUpEnabled(false);
+	}
+	
+	// Scrolls the fragment container such that container is complete hidden
+	public void scrollOut(final Runnable runnable){
+		Animation animation = new TranslateAnimation(0, width*1/6, 0, 0);
+		animation.setDuration(200);
+		animation.setAnimationListener(new AnimationListener(){
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				runnable.run();
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {}
+
+			@Override
+			public void onAnimationStart(Animation animation) {}
+			
+		});
+		startAnimation(animation);
 	}
 }

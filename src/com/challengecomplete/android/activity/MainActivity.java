@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.FrameLayout;
 
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.fragment.CurrentGoalsFragment;
+import com.challengecomplete.android.fragment.MainFragment;
 import com.challengecomplete.android.fragment.SideFragment;
 import com.challengecomplete.android.models.goals.GoalContentProvider;
 import com.challengecomplete.android.models.goals.GoalProcessor;
@@ -35,6 +37,10 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 	private static final String TAG = "MainActivity";
 	
 	private static final int INTENT_LOGIN = 1;
+	
+	private int currentFragment;
+	public static final int FRAGMENT_CURRENTGOALS = 1;
+	public static final int FRAGMENT_BUCKETGOALS = 2;
 	
 	private ScrollView mScrollView;
 	private SideFragment mSideFragment;
@@ -56,7 +62,8 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
         CurrentGoalsFragment mFragment = new CurrentGoalsFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(fl.getId(), mFragment);
-      
+        currentFragment = FRAGMENT_CURRENTGOALS;
+        
         FrameLayout sp = (FrameLayout) findViewById(R.id.side_panel);
         mSideFragment = new SideFragment();
         ft.add(sp.getId(), mSideFragment);
@@ -142,6 +149,42 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
           default:            
         	  return super.onOptionsItemSelected(item);    
     	}
+    }
+    
+    // Switching the fragment container view to another fragment
+    public void switchFragment(int fragmentId){
+    	if (currentFragment == fragmentId) return;
+    	FrameLayout fl = (FrameLayout) findViewById(R.id.fragment_container);
+    	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+    	Fragment mFragment = null;
+    	
+    	switch (fragmentId) {
+    		case FRAGMENT_CURRENTGOALS:
+    			mFragment = new CurrentGoalsFragment();
+    			break;
+    		case FRAGMENT_BUCKETGOALS:
+    			mFragment = new MainFragment();
+    			break;
+    		default:
+    			return;
+    	}
+    	mScrollView.scrollOut(getFragmentSwitchRunnable(ft, mFragment, fl, fragmentId));
+
+    }
+    
+    // Callback for scrollOut
+    public Runnable getFragmentSwitchRunnable(final FragmentTransaction ft, 
+    		final Fragment mFragment, final FrameLayout fl, final int fragmentId){
+    	
+    	return new Runnable() {
+	    	@Override
+			public void run() {
+		    	currentFragment = fragmentId;
+		    	ft.replace(fl.getId(), mFragment);
+		    	ft.commit();
+				mScrollView.close();
+			}
+    	};
     }
 
 	@Override
