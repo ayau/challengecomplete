@@ -54,6 +54,9 @@ public class SvgLoader {
 	    	if (svgString == null)
 	    		return null;
 	    	
+	    	// Save svg to database
+	    	
+	    	
 	    	String svgColor = badge.substring(badge.length() - 6);
 	    	
 	    	svgString = svgString.replaceAll("fill=\"#000000\"", "");

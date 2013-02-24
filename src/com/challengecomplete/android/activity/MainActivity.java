@@ -100,7 +100,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     
     public void fetch(){
     	fetchMe();
-//        syncGoals();
+        syncGoals();
     }
     
     public void fetchMe(){

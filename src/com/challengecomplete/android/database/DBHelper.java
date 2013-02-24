@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.challengecomplete.android.models.badges.BadgeTable;
 import com.challengecomplete.android.models.goals.GoalTable;
 
 // TODO
@@ -18,11 +19,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase database) {
+		BadgeTable.onCreate(database);
 		GoalTable.onCreate(database);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVer, int newVer) {
+		BadgeTable.onUpgrade(database, oldVer, newVer);
 		GoalTable.onUpgrade(database, oldVer, newVer);
 	}
 }
