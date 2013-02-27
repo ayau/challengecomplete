@@ -153,7 +153,11 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     
     // Switching the fragment container view to another fragment
     public void switchFragment(int fragmentId){
-    	if (currentFragment == fragmentId) return;
+    	if (currentFragment == fragmentId) {
+    		mScrollView.scrollOut(null);
+    		return;
+    	}
+    	
     	FrameLayout fl = (FrameLayout) findViewById(R.id.fragment_container);
     	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
     	Fragment mFragment = null;
@@ -168,6 +172,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     		default:
     			return;
     	}
+    	
     	mScrollView.scrollOut(getFragmentSwitchRunnable(ft, mFragment, fl, fragmentId));
 
     }

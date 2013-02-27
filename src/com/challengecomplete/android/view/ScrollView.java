@@ -186,6 +186,7 @@ public class ScrollView extends HorizontalScrollView{
 	}
 	
 	// Scrolls the fragment container such that container is complete hidden
+	// runnable to run after animation is completed
 	public void scrollOut(final Runnable runnable){
 		Animation animation = new TranslateAnimation(0, width*1/6, 0, 0);
 		animation.setDuration(200);
@@ -193,7 +194,7 @@ public class ScrollView extends HorizontalScrollView{
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				runnable.run();
+				if (runnable != null) runnable.run();
 			}
 
 			@Override
