@@ -22,7 +22,7 @@ import com.challengecomplete.android.utils.ChallengeComplete;
 public class HttpCaller {
 	private static final String TAG ="HttpCaller";
 	
-	public static final String HOST = "http://192.168.1.116:3000/api";
+	public static final String HOST = "http://10.1.10.20:3000/api";
 	
 	public static String getRequest(Context context, String path) {
 		HttpClient httpclient = new DefaultHttpClient();

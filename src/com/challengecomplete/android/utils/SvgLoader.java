@@ -4,14 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.BaseAdapter;
 
 import com.challengecomplete.android.models.badges.BadgeContentProvider;
+import com.challengecomplete.android.models.badges.BadgeProcessor;
 import com.challengecomplete.android.models.badges.BadgeTable;
 import com.challengecomplete.android.service.HttpCaller;
 import com.larvalabs.svgandroid.SVG;
@@ -66,19 +67,20 @@ public class SvgLoader {
 	    	String selection = BadgeTable.COLUMN_NAME + " = ?"; // LIMIT 1
 	    	String[] selectionArgs = {badgeName};
 	    	Cursor c = context.getContentResolver().query(BadgeContentProvider.CONTENT_URI, projection, selection, selectionArgs, null);
-	    	c.moveToFirst();
-	    	svgString = c.getString(1);
-	    	c.close();
 	    	
-	    	if (svgString == null){
-		    	svgString = HttpCaller.getRequest(context, badge);
+	    	if (c.getCount() > 0){
+		    	c.moveToFirst();
+		    	svgString = c.getString(1);
+	    	} else {
+	    		svgString = HttpCaller.getRequest(context, badge);
 		    	if (svgString == null)
 		    		return null;
+		    	// Save svg to database
+		    	ContentValues contentValues = BadgeProcessor.createContentValues(badgeName, svgString);
+		    	context.getContentResolver().insert(BadgeContentProvider.CONTENT_URI, contentValues);
 	    	}
 	    	
-	    	// Save svg to database
-//	    	ContentValues contentValues = BadgeProcessor.createContentValues(badgeName, svgString);
-//	    	context.getContentResolver().insert(BadgeContentProvider.CONTENT_URI, contentValues);
+	    	c.close();
 	    	
 	    	String svgColor = badge.substring(badge.length() - 6);
 	    	

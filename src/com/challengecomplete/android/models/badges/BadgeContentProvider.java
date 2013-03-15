@@ -129,9 +129,10 @@ public class BadgeContentProvider extends ContentProvider{
 	    case BADGES:
 //	    	db.
 //	    	db.execSQL("INSERT INTO " + BadgeTable.NAME +
-//	    			" (" + BadgeTable.COLUMN_NAME + ", " + BadgeTable.COLUMN_SVG + ") SELECT * FROM (SELECT '" + item  
+//	    			" (" + BadgeTable.COLUMN_NAME + ", " + BadgeTable.COLUMN_SVG + ") SELECT * FROM (SELECT '" 
+//	    			+ values.getAsString(BadgeTable.COLUMN_NAME) + ", " + values.getAsString(BadgeTable.COLUMN_SVG) 
 //	    			+ "') WHERE NOT EXISTS (SELECT " + BadgeTable.COLUMN_NAME +
-//	    			" FROM " + BadgeTable.NAME + " WHERE " + BadgeTable.COLUMN_NAME + " = '" + item + "') LIMIT 1;")
+//	    			" FROM " + BadgeTable.NAME + " WHERE " + BadgeTable.COLUMN_NAME + " = '" + values.getAsString(BadgeTable.COLUMN_NAME) + "') LIMIT 1;");
 	    	id = db.insert(BadgeTable.NAME, null, values);
 	    	Log.i("CONTENT PROVIDER", id +"");
 	    	break;

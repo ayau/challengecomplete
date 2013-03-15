@@ -16,9 +16,10 @@ public class BadgeTable {
 	};
 
 	// Database creation sql statement
+	// ID currently is not primary key -> change after setup id for badges
 	private static final String DATABASE_CREATE = "create table " + NAME + "("
-			+ COLUMN_ID + " integer primary key, " + COLUMN_NAME
-			+ " text not null, " + COLUMN_SVG + " text not null);";
+			+ COLUMN_ID + " integer, " + COLUMN_NAME
+			+ " text primary key not null, " + COLUMN_SVG + " text not null);";
 
 	public static void onCreate(SQLiteDatabase database) {
 		database.execSQL(DATABASE_CREATE);
