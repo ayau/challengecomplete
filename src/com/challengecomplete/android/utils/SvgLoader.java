@@ -5,10 +5,14 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.BaseAdapter;
 
+import com.challengecomplete.android.models.badges.BadgeContentProvider;
+import com.challengecomplete.android.models.badges.BadgeTable;
 import com.challengecomplete.android.service.HttpCaller;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
@@ -50,12 +54,31 @@ public class SvgLoader {
 		// Decode image in background.
 	    @Override
 	    protected Bitmap doInBackground(Integer... params) {
-	    	String svgString = HttpCaller.getRequest(context, badge);
-	    	if (svgString == null)
-	    		return null;
+
+	    	// Switch a better way to get the id - /svg/guitar.svg?color=#something
+	    	String badgeName = badge.substring(5, badge.length()-17);
+	    	
+	    	String svgString;
+	    	
+	    	// Temporary solution - long term should link id of badge to goal so they can be fetched together in
+	    	// GoalContentProvider
+	    	String[] projection = {BadgeTable.COLUMN_NAME, BadgeTable.COLUMN_SVG};
+	    	String selection = BadgeTable.COLUMN_NAME + " = ?"; // LIMIT 1
+	    	String[] selectionArgs = {badgeName};
+	    	Cursor c = context.getContentResolver().query(BadgeContentProvider.CONTENT_URI, projection, selection, selectionArgs, null);
+	    	c.moveToFirst();
+	    	svgString = c.getString(1);
+	    	c.close();
+	    	
+	    	if (svgString == null){
+		    	svgString = HttpCaller.getRequest(context, badge);
+		    	if (svgString == null)
+		    		return null;
+	    	}
 	    	
 	    	// Save svg to database
-	    	
+//	    	ContentValues contentValues = BadgeProcessor.createContentValues(badgeName, svgString);
+//	    	context.getContentResolver().insert(BadgeContentProvider.CONTENT_URI, contentValues);
 	    	
 	    	String svgColor = badge.substring(badge.length() - 6);
 	    	

@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.challengecomplete.android.database.DBHelper;
 
@@ -126,8 +127,14 @@ public class BadgeContentProvider extends ContentProvider{
 	    
 	    switch (uriType) {
 	    case BADGES:
-	      id = db.insert(BadgeTable.NAME, null, values);
-	      break;
+//	    	db.
+//	    	db.execSQL("INSERT INTO " + BadgeTable.NAME +
+//	    			" (" + BadgeTable.COLUMN_NAME + ", " + BadgeTable.COLUMN_SVG + ") SELECT * FROM (SELECT '" + item  
+//	    			+ "') WHERE NOT EXISTS (SELECT " + BadgeTable.COLUMN_NAME +
+//	    			" FROM " + BadgeTable.NAME + " WHERE " + BadgeTable.COLUMN_NAME + " = '" + item + "') LIMIT 1;")
+	    	id = db.insert(BadgeTable.NAME, null, values);
+	    	Log.i("CONTENT PROVIDER", id +"");
+	    	break;
 	    default:
 	      throw new IllegalArgumentException("Unknown URI: " + uri);
 	    }

@@ -9,9 +9,10 @@ public class BadgeTable {
 	public final static String COLUMN_NAME = "name";
 	public final static String COLUMN_SVG = "svg";
 
-	public final static String[] allColumns = { COLUMN_ID, // 0
-			COLUMN_NAME, // 1
-			COLUMN_SVG // 2
+	public final static String[] allColumns = { 
+			COLUMN_ID, 		// nonexistent
+			COLUMN_NAME, 	// 0
+			COLUMN_SVG 		// 1
 	};
 
 	// Database creation sql statement

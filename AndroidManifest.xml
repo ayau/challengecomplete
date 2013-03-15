@@ -40,6 +40,9 @@
         <provider
             android:name=".models.goals.GoalContentProvider"
             android:authorities="com.challengecomplete.android.models.goals" />
+        <provider
+            android:name=".models.badges.BadgeContentProvider"
+            android:authorities="com.challengecomplete.android.models.badges" />
     </application>
 
 </manifest>
