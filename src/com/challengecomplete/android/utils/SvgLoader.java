@@ -33,9 +33,9 @@ public class SvgLoader {
 		this.context = context;
 	}
 	
-	public void getSvg(int id, String badge, String color){
+	public void getSvg(int id, String badge, String fgColor, String bgColor){
 		if (!workers.containsKey(id)){
-			BitmapWorkerTask task = new BitmapWorkerTask(id, badge, color);
+			BitmapWorkerTask task = new BitmapWorkerTask(id, badge, fgColor, bgColor);
 	        workers.put(id, task);
 			task.execute(id);
 		}
@@ -43,55 +43,56 @@ public class SvgLoader {
 
 	class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
 	    private String badge;
-	    private String color;
+	    private String fgColor;
+	    private String bgColor;
 	    private int id;
 	    
-		public BitmapWorkerTask(int id, String badge, String color) {
+		public BitmapWorkerTask(int id, String badge, String fgColor, String bgColor) {
 			this.id = id;
 			this.badge = badge;
-			this.color = color;
+			this.fgColor = fgColor;
+			this.bgColor = bgColor;
 		}
 
 		// Decode image in background.
 	    @Override
 	    protected Bitmap doInBackground(Integer... params) {
-
-	    	// Switch a better way to get the id - /svg/guitar.svg?color=#something
-	    	String badgeName = badge.substring(5, badge.length()-17);
-	    	
-	    	String svgString;
+	    	String svgString = null;
 	    	
 	    	// Temporary solution - long term should link id of badge to goal so they can be fetched together in
 	    	// GoalContentProvider
 	    	String[] projection = {BadgeTable.COLUMN_NAME, BadgeTable.COLUMN_SVG};
 	    	String selection = BadgeTable.COLUMN_NAME + " = ?"; // LIMIT 1
-	    	String[] selectionArgs = {badgeName};
+	    	String[] selectionArgs = {badge};
 	    	Cursor c = context.getContentResolver().query(BadgeContentProvider.CONTENT_URI, projection, selection, selectionArgs, null);
 	    	
 	    	if (c.getCount() > 0){
 		    	c.moveToFirst();
 		    	svgString = c.getString(1);
-	    	} else {
-	    		svgString = HttpCaller.getRequest(context, badge);
+	    	} 
+
+	    	c.close();
+	    	
+	    	if (svgString == null) {
+	    		svgString = HttpCaller.getRequest(context, "/svg/" + badge + ".svg");
 		    	if (svgString == null)
 		    		return null;
 		    	// Save svg to database
-		    	ContentValues contentValues = BadgeProcessor.createContentValues(badgeName, svgString);
+		    	ContentValues contentValues = BadgeProcessor.createContentValues(badge, svgString);
 		    	context.getContentResolver().insert(BadgeContentProvider.CONTENT_URI, contentValues);
 	    	}
 	    	
-	    	c.close();
-	    	
-	    	String svgColor = badge.substring(badge.length() - 6);
+//	    	
+//	    	String svgColor = badge.substring(badge.length() - 6);
 	    	
 	    	svgString = svgString.replaceAll("fill=\"#000000\"", "");
-	    	svgString = svgString.replaceAll("<polygon", "<polygon fill=\"#" + svgColor + "\"");
-	    	svgString = svgString.replaceAll("<path", "<path fill=\"#" + svgColor + "\"");
-	    	svgString = svgString.replaceAll("<rect", "<rect fill=\"#" + svgColor + "\"");
+	    	svgString = svgString.replaceAll("<polygon", "<polygon fill=\"#" + fgColor + "\"");
+	    	svgString = svgString.replaceAll("<path", "<path fill=\"#" + fgColor + "\"");
+	    	svgString = svgString.replaceAll("<rect", "<rect fill=\"#" + fgColor + "\"");
 	    	
 	    	InputStream is = new ByteArrayInputStream(svgString.getBytes());
 			SVG svg = SVGParser.getSVGFromInputStream(is);
-			Bitmap bitmap = Media.getBadgeBitmap(context, svg.createPictureDrawable(), color);
+			Bitmap bitmap = Media.getBadgeBitmap(context, svg.createPictureDrawable(), bgColor);
 			mBitmapCache.addBitmapToMemoryCache(params[0] + "", bitmap);
 	    	
 			return bitmap;

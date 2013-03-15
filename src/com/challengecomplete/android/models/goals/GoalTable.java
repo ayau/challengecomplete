@@ -13,7 +13,8 @@ public class GoalTable {
 	public final static String COLUMN_DEADLINE = "deadline";
 	public final static String COLUMN_HAS_DEADLINE = "has_deadline";
 	public final static String COLUMN_BADGE = "badge";
-	public final static String COLUMN_COLOR = "color";
+	public final static String COLUMN_FG_COLOR = "fg_color";
+	public final static String COLUMN_BG_COLOR = "bg_color";
 	public final static String COLUMN_OWNER_ID = "owner_id";
 	public final static String COLUMN_PARENT_ID = "parent_id";
 	public final static String COLUMN_IS_CURRENT = "is_current";
@@ -28,10 +29,11 @@ public class GoalTable {
 		COLUMN_DEADLINE,		// 6
 		COLUMN_HAS_DEADLINE,	// 7
 		COLUMN_BADGE,			// 8
-		COLUMN_COLOR,			// 9
-		COLUMN_OWNER_ID,		// 10
-		COLUMN_PARENT_ID,		// 11
-		COLUMN_IS_CURRENT		// 12
+		COLUMN_FG_COLOR,		// 9
+		COLUMN_BG_COLOR,		// 10
+		COLUMN_OWNER_ID,		// 11
+		COLUMN_PARENT_ID,		// 12
+		COLUMN_IS_CURRENT		// 13
 	};
 	
 	// Database creation sql statement
@@ -46,7 +48,8 @@ public class GoalTable {
 		  + COLUMN_DEADLINE + " text not null, "
 		  + COLUMN_HAS_DEADLINE + " integer not null, "
 		  + COLUMN_BADGE + " text not null, "
-		  + COLUMN_COLOR + " text not null, "
+		  + COLUMN_FG_COLOR + " text not null, "
+		  + COLUMN_BG_COLOR + " text not null, "
 		  + COLUMN_OWNER_ID + " integer not null, "
 		  + COLUMN_PARENT_ID + " integer not null, "
 		  + COLUMN_IS_CURRENT + " integer not null);";

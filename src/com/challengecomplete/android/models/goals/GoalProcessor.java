@@ -22,7 +22,7 @@ public class GoalProcessor {
 	public final static String DEADLINE = "deadline";
 	public final static String HAS_DEADLINE = "has_deadline";
 	public final static String BADGE = "badge";
-	public final static String COLOR = "color";
+	public final static String BG_COLOR = "color";
 	public final static String OWNER_ID = "owner_id";
 	public final static String PARENT_ID = "parent_id";
 	public final static String IS_CURRENT = "is_current";
@@ -56,15 +56,22 @@ public class GoalProcessor {
 				long updated_at = o.getLong(UPDATED_AT);
 				String deadline = o.getString(DEADLINE);
 				int has_deadline = o.getInt(HAS_DEADLINE);
-				String badge = o.getString(BADGE);
-				String color = o.getString(COLOR);
+
+				///svg/guitar.svg?color=#something
+				String badgeUrl = o.getString(BADGE);
+	
+		    	String fg_color = badgeUrl.substring(badgeUrl.length() - 6);
+		    	String badge = badgeUrl.substring(5, badgeUrl.length() - 17);	    	
+				
+				String bg_color = o.getString(BG_COLOR);
+				
 				int owner_id = o.getInt(OWNER_ID);
 				int parent_id = o.getInt(PARENT_ID);
 				int is_current = o.optInt(IS_CURRENT, 0);
 				String status = o.getString(STATUS);
 				
 				ContentValues cv = createContentValues(id, name, description, points, created_at, updated_at, deadline, 
-						has_deadline, badge, color, owner_id, parent_id, is_current);
+						has_deadline, badge, fg_color, bg_color, owner_id, parent_id, is_current);
 				
 				if (status.equals(STATUS_CREATED)){
 					created.add(cv);
@@ -89,7 +96,7 @@ public class GoalProcessor {
 
 	public static ContentValues createContentValues(int id, String name, String description, int points,
 			long created_at, long updated_at, String deadline, 
-			int has_deadline, String badge, String color, int owner_id, int parent_id, int is_current){ // state
+			int has_deadline, String badge, String fg_color, String bg_color, int owner_id, int parent_id, int is_current){ // state
 		
 		ContentValues values = new ContentValues();
 		values.put(GoalTable.COLUMN_ID, id);
@@ -101,7 +108,8 @@ public class GoalProcessor {
 	    values.put(GoalTable.COLUMN_DEADLINE, deadline);
 	    values.put(GoalTable.COLUMN_HAS_DEADLINE, has_deadline);
 	    values.put(GoalTable.COLUMN_BADGE, badge);
-	    values.put(GoalTable.COLUMN_COLOR, color);
+	    values.put(GoalTable.COLUMN_FG_COLOR, fg_color);
+	    values.put(GoalTable.COLUMN_BG_COLOR, bg_color);
 	    values.put(GoalTable.COLUMN_OWNER_ID, owner_id);
 	    values.put(GoalTable.COLUMN_PARENT_ID, owner_id);
 	    values.put(GoalTable.COLUMN_IS_CURRENT, is_current);

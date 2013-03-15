@@ -15,7 +15,8 @@ public class Goal {
 	private String deadline;
 	private boolean has_deadline;
 	private String badge;
-	private String color;
+	private String fg_color;
+	private String bg_color;
 	private int owner_id;
 	private int parent_id;
 	
@@ -23,7 +24,7 @@ public class Goal {
 	// TODO
 	// need default values
 	public Goal(String name, String description, int points, long created_at, long updated_at,
-			String deadline, boolean has_deadline, String badge, String color, int owner_id, int parent_id){
+			String deadline, boolean has_deadline, String badge, String fg_color, String bg_color, int owner_id, int parent_id){
 		this.name = name;
 		this.description = description;
 		this.points = points;
@@ -32,7 +33,8 @@ public class Goal {
 		this.deadline = deadline;
 		this.has_deadline = has_deadline;
 		this.badge = badge;
-		this.color = color;
+		this.fg_color = fg_color;
+		this.bg_color = bg_color;
 		this.owner_id = owner_id;
 		this.parent_id = parent_id;
 	}
@@ -50,7 +52,8 @@ public class Goal {
 	    if (has_deadline) has_deadline_int = 1;
 	    values.put(GoalTable.COLUMN_HAS_DEADLINE, has_deadline_int);
 	    values.put(GoalTable.COLUMN_BADGE, badge);
-	    values.put(GoalTable.COLUMN_COLOR, color);
+	    values.put(GoalTable.COLUMN_FG_COLOR, fg_color);
+	    values.put(GoalTable.COLUMN_BG_COLOR, bg_color);
 	    values.put(GoalTable.COLUMN_OWNER_ID, owner_id);
 	    values.put(GoalTable.COLUMN_PARENT_ID, parent_id);
 	    
@@ -161,12 +164,20 @@ public class Goal {
 		this.badge = badge;
 	}
 
-	public String getColor() {
-		return color;
+	public String getFgColor() {
+		return fg_color;
 	}
 
-	public void setColor(String color) {
-		this.color = color;
+	public void setFgColor(String color) {
+		this.fg_color = color;
+	}
+	
+	public String getBgColor() {
+		return bg_color;
+	}
+
+	public void setBgColor(String color) {
+		this.bg_color = color;
 	}
 
 	public int getOwner_id() {
