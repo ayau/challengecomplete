@@ -50,7 +50,8 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 		String badge = c.getString(8);
 		String fgColor = c.getString(9);
 		String bgColor = c.getString(10);
-		 
+		String svg = c.getString(14);
+		
 		ViewHolder holder = (ViewHolder) view.getTag();
 		holder.name.setText(name);
 		holder.badge.setTag(id);
@@ -58,6 +59,9 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 		// Check cache first
 		Bitmap bitmap = mBitmapCache.getBitmapFromMemCache(id + "");
 //		Log.i("HERE", id + "");
+		if (bitmap == null && svg != null)
+			bitmap = svgLoader.processSvg(id, svg, fgColor, bgColor);
+		
 		if (bitmap == null) {
 			holder.badge.setImageResource(R.drawable.ic_launcher);
 			svgLoader.getSvg(id, badge, fgColor, bgColor);

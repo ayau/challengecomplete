@@ -67,8 +67,8 @@ public class CurrentGoalsFragment extends ListFragment implements LoaderCallback
 	public Loader<Cursor> onCreateLoader(int id, Bundle extras) {
 		// TODO
 		// Handle this in ContentProvider instead?
-		return new CursorLoader(getActivity(), GoalContentProvider.CONTENT_URI,
-				GoalTable.allColumns, GoalTable.NAME + "." + GoalTable.COLUMN_IS_CURRENT + "=1", null, null);
+		return new CursorLoader(getActivity(), GoalContentProvider.CONTENT_URI_CURRENT_WITH_BADGES,
+				GoalTable.allColumnsWithBadge, null, null, null); 
 	}
 
 	@Override

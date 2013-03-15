@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.challengecomplete.android.database.DBHelper;
+import com.challengecomplete.android.models.badges.BadgeTable;
 
 // TODO
 // Refactor switch statements + isEmpty(Selection) part
@@ -24,12 +25,18 @@ public class GoalContentProvider extends ContentProvider {
 	// code to return when Uri is matched
 	private static final int GOALS = 0x01;
 	private static final int GOAL = 0x02;
+	private static final int CURRENT_GOALS_WITH_BADGES = 0x03;
 
 	private static final String AUTHORITY = "com.challengecomplete.android.models.goals";
 
 	private static final String BASE_PATH = "goals";
+	private static final String CURRENT_WITH_BADGES_PATH = "current_goals_with_badges";
+	
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/" + BASE_PATH);
+	
+	public static final Uri CONTENT_URI_CURRENT_WITH_BADGES = Uri.parse("content://" + AUTHORITY
+			+ "/" + CURRENT_WITH_BADGES_PATH);
 
 	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
 			+ "/goals";
@@ -40,6 +47,7 @@ public class GoalContentProvider extends ContentProvider {
 	static {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH, GOALS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", GOAL);
+		sURIMatcher.addURI(AUTHORITY, CURRENT_WITH_BADGES_PATH, CURRENT_GOALS_WITH_BADGES);
 	}
 	
 	@Override
@@ -56,28 +64,38 @@ public class GoalContentProvider extends ContentProvider {
 	    SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
 	    // Check if the caller has requested a column which does not exists
-	    checkColumns(projection);
+	    checkColumns(uri, projection);
 
 	    // Set the table
 	    queryBuilder.setTables(GoalTable.NAME);
+	    
+	    SQLiteDatabase db = dbHelper.getWritableDatabase();
+	    Cursor cursor;
 
 	    int uriType = sURIMatcher.match(uri);
 	    switch (uriType) {
 	    case GOALS:
-	    	
+	    	cursor = queryBuilder.query(db, projection, selection,
+	    		        selectionArgs, null, null, sortOrder);
 	    	break;
 	    case GOAL:
 	    	// Adding the ID to the original query
 	    	queryBuilder.appendWhere(GoalTable.COLUMN_ID + "="
 	    			+ uri.getLastPathSegment());
+	    	cursor = queryBuilder.query(db, projection, selection,
+	    		        selectionArgs, null, null, sortOrder);
+	    	break;
+	    case CURRENT_GOALS_WITH_BADGES:
+	    	cursor = dbHelper.getReadableDatabase().rawQuery(
+	    			"SELECT " + GoalTable.NAME + ".*, " + BadgeTable.NAME + "." + BadgeTable.COLUMN_SVG
+	    			+ " from " + GoalTable.NAME + " LEFT OUTER JOIN " + BadgeTable.NAME
+	    			+ " on (" + GoalTable.NAME + "." + GoalTable.COLUMN_BADGE + "="
+	    			+ BadgeTable.NAME + "." + BadgeTable.COLUMN_NAME + ")"
+	    			+ " where " + GoalTable.NAME + "." + GoalTable.COLUMN_IS_CURRENT + "=1", null);
 	    	break;
 	    default:
 	    	throw new IllegalArgumentException("Unknown URI: " + uri);
 	    }
-
-	    SQLiteDatabase db = dbHelper.getWritableDatabase();
-	    Cursor cursor = queryBuilder.query(db, projection, selection,
-	        selectionArgs, null, null, sortOrder);
 	    
 	    // Make sure that potential listeners are getting notified
 	    cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -178,8 +196,24 @@ public class GoalContentProvider extends ContentProvider {
 	}
 	
 	// Check if all columns which are requested are available
-	private void checkColumns(String[] projection) {
-		String[] available = GoalTable.allColumns;
+	private void checkColumns(Uri uri, String[] projection) {
+		String[] available;
+		
+		int uriType = sURIMatcher.match(uri);
+	    switch (uriType) {
+	    case GOALS:
+	    	available = GoalTable.allColumns;
+	    	break;
+	    case GOAL:
+	    	available = GoalTable.allColumns;
+	    	break;
+	    case CURRENT_GOALS_WITH_BADGES:
+	    	available = GoalTable.allColumnsWithBadge;
+	    	break;
+	    default:
+	    	throw new IllegalArgumentException("Unknown URI: " + uri);
+	    }
+		
 		if (projection != null) {
 			HashSet<String> requestedColumns = new HashSet<String>(Arrays.asList(projection));
 		    HashSet<String> availableColumns = new HashSet<String>(Arrays.asList(available));

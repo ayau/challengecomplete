@@ -218,6 +218,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 	        syncGoals();
 			
 		} else if (taskId == syncId){
+			Log.i("RESULTS", results);
 			if (results != null) {
 				SyncContentValues contentValues = GoalProcessor.bulkCreateContentValues(results);
 				
