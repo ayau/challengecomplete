@@ -154,7 +154,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     // Switching the fragment container view to another fragment
     public void switchFragment(int fragmentId){
     	if (currentFragment == fragmentId) {
-    		mScrollView.scrollOut(null);
+    		mScrollView.close();
     		return;
     	}
     	
