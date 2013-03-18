@@ -58,13 +58,13 @@ public class CurrentGoalsAdapter extends CursorAdapter {
 		
 		// Check cache first
 		Bitmap bitmap = mBitmapCache.getBitmapFromMemCache(id + "");
-//		Log.i("HERE", id + "");
-		if (bitmap == null && svg != null)
-			bitmap = svgLoader.processSvg(id, svg, fgColor, bgColor);
-		
-		if (bitmap == null) {
+
+		if (bitmap == null){
 			holder.badge.setImageResource(R.drawable.ic_launcher);
-			svgLoader.getSvg(id, badge, fgColor, bgColor);
+			if (svg != null)
+				svgLoader.getSvg(holder.badge, svg, id, badge, fgColor, bgColor);
+			else
+				svgLoader.getSvg(holder.badge, null, id, badge, fgColor, bgColor);
 		} else {
 			holder.badge.setImageBitmap(bitmap);
 		}
