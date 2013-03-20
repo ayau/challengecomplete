@@ -34,12 +34,6 @@ public class ScrollView extends HorizontalScrollView{
 	private GestureDetector mGestureDetector;
 	private TranslateAnimation bounceAnimation;
 	
-	
-//	for measuring angle of gesture
-	private int oldX;
-	private int oldY;
-	
-	
 	public ScrollView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
@@ -69,15 +63,19 @@ public class ScrollView extends HorizontalScrollView{
 		
 		setMeasuredDimension(width, height);		
 		
-		FrameLayout fragment_container = (FrameLayout) this.findViewById(R.id.fragment_container);
-		FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(width, height);
-		lp.setMargins(closedX, 0, 0, 0);
-		fragment_container.setLayoutParams(lp);
-		fragment_container.measure(MeasureSpec.makeMeasureSpec(width + closedX, MeasureSpec.EXACTLY), heightMeasureSpec);
+		int shadowWidth = this.getResources().getDimensionPixelSize(R.dimen.sidepanel_shadow_width);
 		
-		for(int i = 0; i < fragment_container.getChildCount(); i++){
-			fragment_container.getChildAt(i).measure(MeasureSpec.makeMeasureSpec(width,  MeasureSpec.EXACTLY), heightMeasureSpec);
-		}
+		// originally fragment_container
+		FrameLayout container = (FrameLayout) this.findViewById(R.id.scrollview_container);
+		FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(width, height);
+		lp.setMargins(closedX - shadowWidth, 0, 0, 0);
+		container.setLayoutParams(lp);
+		container.measure(MeasureSpec.makeMeasureSpec(width + closedX, MeasureSpec.EXACTLY), heightMeasureSpec);
+		
+//		for(int i = 0; i < fragment_container.getChildCount(); i++){
+//			fragment_container.getChildAt(i).measure(MeasureSpec.makeMeasureSpec(width,  MeasureSpec.EXACTLY), heightMeasureSpec);
+//		}
+		this.findViewById(R.id.fragment_container).measure(MeasureSpec.makeMeasureSpec(width,  MeasureSpec.EXACTLY), heightMeasureSpec);
 	}
 	
 	@Override
@@ -85,10 +83,16 @@ public class ScrollView extends HorizontalScrollView{
 		// If scrollView is opened and the touch position is inside mainView
         if (isOpened() && ev.getX() + getScrollX() > closedX) return true;
         
-        // If scrollView is closed and the touch position is on the right half of the screen
-        if (isClosed() && ev.getX() > width/2) return false;
-        
-		return super.onInterceptTouchEvent(ev) && mGestureDetector.onTouchEvent(ev);
+        // If can scroll
+		if (super.onInterceptTouchEvent(ev)){
+			// If scrollView is closed and the touch position is on the right half of the screen
+	        if (isClosed() && ev.getX() > width/3) return false;
+	        
+	        // if gesture is valid (less than 45 degree)
+			return mGestureDetector.onTouchEvent(ev);
+		}
+		
+		return false;
     }
 	
 	@Override
@@ -158,9 +162,9 @@ public class ScrollView extends HorizontalScrollView{
 	
 	// Return true if we're scrolling in the x direction  
     class XScrollDetector extends SimpleOnGestureListener {
-        @Override
+    	@Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if(Math.abs(distanceY) < Math.abs(distanceX)) {
+    		if(Math.abs(distanceY) < Math.abs(distanceX)) {
                 return true;
             }
             return false;

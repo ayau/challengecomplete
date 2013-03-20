@@ -1,26 +1,38 @@
 package com.challengecomplete.android.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.challengecomplete.android.R;
-import com.challengecomplete.android.utils.ChallengeComplete;
 
 public class SidePanel extends ViewGroup{
+	private int width;
+	private int height;
 	
 	public SidePanel(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 	
+//	@Override
+//	public void onDraw(Canvas canvas){
+//		Shader shader = new LinearGradient(width-5, 0, width, 0, Color.TRANSPARENT, Color.parseColor("#44000000"), TileMode.CLAMP); 
+//		Paint paint = new Paint(); 
+//		paint.setShader(shader); 
+//		canvas.drawRect(new RectF(width - 5, 0, width, height), paint); 
+//	}
+	
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
-		int height = MeasureSpec.getSize(heightMeasureSpec);
-		int width = MeasureSpec.getSize(widthMeasureSpec);
-		
-		width = (int) (width*5/6);
+		height = MeasureSpec.getSize(heightMeasureSpec);
+		width = (int) MeasureSpec.getSize(widthMeasureSpec) * 5/6;
 		
 		setMeasuredDimension(width, height);
 
