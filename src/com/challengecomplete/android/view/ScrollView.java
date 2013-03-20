@@ -8,14 +8,14 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
+import android.widget.Scroller;
 
 import com.challengecomplete.android.R;
 
@@ -30,16 +30,18 @@ public class ScrollView extends HorizontalScrollView{
 	private int openedX;
 	private int closedX;
 	private boolean scrolled; // detect single tap event
+	private Scroller mScroller; // scroller for smooth scrolling
 	
 	private GestureDetector mGestureDetector;
 	private TranslateAnimation bounceAnimation;
 	
 	public ScrollView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		
 		setOverScrollMode(View.OVER_SCROLL_NEVER);
 		setHorizontalFadingEdgeEnabled(false);
+		
+		mScroller = new Scroller(context, new SmoothInterpolator());
 		
 //		ViewTreeObserver viewTreeObserver = getViewTreeObserver();
 //		viewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener(){
@@ -110,6 +112,8 @@ public class ScrollView extends HorizontalScrollView{
 				bounceAnimation.cancel();
 				bounceAnimation = null;
 			}
+			
+			if (!mScroller.isFinished()) mScroller.abortAnimation();
 
 			scrolled = false;
 			break;
@@ -180,14 +184,32 @@ public class ScrollView extends HorizontalScrollView{
 	}
 	
 	public void close(){
-		smoothScrollTo(closedX, 0);
+		mScroller.startScroll(getScrollX(), 0, closedX - getScrollX(), 0, 500);
+		post(scrollerTask);
+//		smoothScrollTo(closedX, 0);
 		((Activity) this.getContext()).getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 	
 	public void open(){
-		smoothScrollTo(openedX, 0);
+		mScroller.startScroll(getScrollX(), 0, openedX - getScrollX(), 0, 500);
+		post(scrollerTask);
+//		smoothScrollTo(openedX, 0);
 		((Activity) this.getContext()).getActionBar().setDisplayHomeAsUpEnabled(false);
 	}
+	
+	public Runnable scrollerTask = new Runnable() {
+        @Override
+        public void run() {
+            mScroller.computeScrollOffset();
+            scrollTo(mScroller.getCurrX(), 0);
+
+            if (!mScroller.isFinished()) {
+                ScrollView.this.post(this);
+            } else {
+                //deceleration ends here, do your code
+            }
+        }
+    };
 	
 	// Scrolls the fragment container such that container is complete hidden
 	// runnable to run after animation is completed
@@ -209,5 +231,15 @@ public class ScrollView extends HorizontalScrollView{
 			
 		});
 		startAnimation(animation);
+	}
+	
+	// Smooth interpolation. Formula from Prixing
+	// http://cyrilmottier.com/2012/05/22/the-making-of-prixing-fly-in-app-menu-part-1/
+	public class SmoothInterpolator implements Interpolator {
+		
+		@Override
+		public float getInterpolation(float input){
+			return (float) (Math.pow(input - 1, 5) + 1);
+		}
 	}
 }
