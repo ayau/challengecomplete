@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="sidepanel_shadow_width">3dp</dimen>
+    <dimen name="sidepanel_shadow_width">4dp</dimen>
 </resources>
