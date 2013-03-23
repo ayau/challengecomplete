@@ -33,7 +33,7 @@ public class CurrentGoalsFragment extends ListFragment implements LoaderCallback
 		super.onActivityCreated(savedInstanceState);
 
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		View header = inflater.inflate(R.layout.list_header_goal, null, false);
+		View header = inflater.inflate(R.layout.list_header_currentgoals, null, false);
 		TextView dateText = (TextView) header.findViewById(R.id.current_day);;
 		dateText.setText(getDayOfMonthString());
 		getListView().addHeaderView(header);

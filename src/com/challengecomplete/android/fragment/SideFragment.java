@@ -27,6 +27,7 @@ public class SideFragment extends ListFragment{
 	Context context;
 	LayoutInflater inflater;
 	ImageLoader mImageLoader;
+	int selectedFragmentId;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -49,6 +50,8 @@ public class SideFragment extends ListFragment{
 		mImageLoader = new ImageLoader();
 		
 		displayUser();
+		
+		selectedFragmentId = MainActivity.FRAGMENT_CURRENTGOALS;
 		
 		ListView list = this.getListView();
 		
@@ -105,7 +108,12 @@ public class SideFragment extends ListFragment{
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id){
 		int fragmentId = ((MenuItem) l.getItemAtPosition(position)).id;
-		if (fragmentId > 0) ((MainActivity) getActivity()).switchFragment(fragmentId);
+		
+		if (fragmentId > 0) {
+			((MainActivity) getActivity()).switchFragment(fragmentId);
+			selectedFragmentId = fragmentId;
+			getListView().invalidateViews();
+		}
 	}
 	
 	public class MenuListAdapter extends ArrayAdapter<MenuItem>{
@@ -147,6 +155,13 @@ public class SideFragment extends ListFragment{
 			
 			MenuItem item = getItem(pos);
 			title.setText(item.title);
+			
+			if (selectedFragmentId == item.id){
+				v.setBackgroundColor(getResources().getColor(R.color.side_item_selected));
+			} else {
+				v.setBackgroundResource(0);
+			}
+			
 			return v;
 		}
 		
@@ -155,6 +170,7 @@ public class SideFragment extends ListFragment{
 	private class MenuItem {
 		int id; // Fragment Id
 		String title;
+		
 		public MenuItem(String title, int id){
 			this.title = title;
 			this.id = id;

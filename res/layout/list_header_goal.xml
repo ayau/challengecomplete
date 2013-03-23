@@ -5,14 +5,8 @@
     android:orientation="vertical"
     android:paddingLeft="10dp" >
 
-    <TextView
-        android:id="@+id/current_day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="Feburary 2013 (Day 7 of 28)"
-        android:textColor="@color/accent"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
 
 </LinearLayout>

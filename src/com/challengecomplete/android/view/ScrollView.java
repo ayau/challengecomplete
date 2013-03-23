@@ -18,6 +18,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.Scroller;
 
 import com.challengecomplete.android.R;
+import com.challengecomplete.android.utils.SmoothInterpolator;
 
 
 public class ScrollView extends HorizontalScrollView{
@@ -197,17 +198,13 @@ public class ScrollView extends HorizontalScrollView{
 		((Activity) this.getContext()).getActionBar().setDisplayHomeAsUpEnabled(false);
 	}
 	
-	public Runnable scrollerTask = new Runnable() {
+	private Runnable scrollerTask = new Runnable() {
         @Override
         public void run() {
             mScroller.computeScrollOffset();
             scrollTo(mScroller.getCurrX(), 0);
 
-            if (!mScroller.isFinished()) {
-                ScrollView.this.post(this);
-            } else {
-                //deceleration ends here, do your code
-            }
+            if (!mScroller.isFinished()) ScrollView.this.post(this);
         }
     };
 	
@@ -232,14 +229,5 @@ public class ScrollView extends HorizontalScrollView{
 		});
 		startAnimation(animation);
 	}
-	
-	// Smooth interpolation. Formula from Prixing
-	// http://cyrilmottier.com/2012/05/22/the-making-of-prixing-fly-in-app-menu-part-1/
-	public class SmoothInterpolator implements Interpolator {
-		
-		@Override
-		public float getInterpolation(float input){
-			return (float) (Math.pow(input - 1, 5) + 1);
-		}
-	}
+
 }

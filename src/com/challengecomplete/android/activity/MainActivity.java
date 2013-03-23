@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.fragment.CurrentGoalsFragment;
+import com.challengecomplete.android.fragment.GoalFragment;
 import com.challengecomplete.android.fragment.MainFragment;
 import com.challengecomplete.android.fragment.SideFragment;
 import com.challengecomplete.android.models.goals.GoalContentProvider;
@@ -58,8 +59,8 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
         mScrollView = (ScrollView) findViewById(R.id.scrollview);
         
         FrameLayout fl = (FrameLayout) findViewById(R.id.fragment_container);
-//        MainFragment mFragment = new MainFragment();
-        CurrentGoalsFragment mFragment = new CurrentGoalsFragment();
+        GoalFragment mFragment = new GoalFragment();
+//        CurrentGoalsFragment mFragment = new CurrentGoalsFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(fl.getId(), mFragment);
         currentFragment = FRAGMENT_CURRENTGOALS;
@@ -195,6 +196,8 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
 		String results = resultData.getString(APIService.RESULTS);
+		if (results == null) return;
+		
 		int taskId = resultData.getInt(APIService.TASK_ID);
 		
 		if (taskId == fetchMeId){
