@@ -20,17 +20,24 @@ import android.widget.ImageView;
 
 import com.challengecomplete.android.R;
 import com.challengecomplete.android.adapter.CurrentGoalsAdapter;
+import com.challengecomplete.android.models.goals.Goal;
 import com.challengecomplete.android.models.goals.GoalContentProvider;
 import com.challengecomplete.android.models.goals.GoalTable;
+import com.challengecomplete.android.utils.Media;
 import com.challengecomplete.android.utils.SmoothInterpolator;
 
 public class GoalFragment extends ListFragment implements LoaderCallbacks<Cursor>{
+	private Goal goal; // id of goal
 	private final static int LOADER_ID = 0x02;
 	private CurrentGoalsAdapter mAdapter;
 	private View mHeader;
 	private int mLastMotionY;
 	private int mHeaderHeight;
 	private ImageView mCoverImage;
+	
+	public GoalFragment(int id){
+		goal = new Goal(id);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -50,7 +57,6 @@ public class GoalFragment extends ListFragment implements LoaderCallbacks<Cursor
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				final int y = (int) event.getY();
-//			    mBounceHack = false;
 
 			    switch (event.getAction()) {
 			    	case MotionEvent.ACTION_UP:
@@ -63,7 +69,6 @@ public class GoalFragment extends ListFragment implements LoaderCallbacks<Cursor
 		                applyHeaderPadding(event);
 		                break;
 			    }
-//			        return super.onTouchEvent(event);
 				return false;
 			}
 		
@@ -89,7 +94,14 @@ public class GoalFragment extends ListFragment implements LoaderCallbacks<Cursor
 		// turn off fading edge
 		getListView().setOverScrollMode(View.OVER_SCROLL_NEVER);
 		
+		// populate goal
+		goal.populate(getActivity());
+		
 //		mCoverImage.setTranslationY(-1 * (mCoverImage.getMeasuredHeight() - mHeaderHeight)/2);
+		
+		ImageView mBadge = (ImageView) mHeader.findViewById(R.id.goal_badge);
+		
+		mBadge.setImageBitmap(Media.tempProcessSvg(getActivity(), goal.getSvg(), goal.getFgColor(), goal.getBgColor()));
 	}
 	
 	@Override

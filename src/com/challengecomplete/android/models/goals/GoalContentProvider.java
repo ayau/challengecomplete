@@ -26,28 +26,39 @@ public class GoalContentProvider extends ContentProvider {
 	private static final int GOALS = 0x01;
 	private static final int GOAL = 0x02;
 	private static final int CURRENT_GOALS_WITH_BADGES = 0x03;
-
+	private static final int GOAL_WITH_EXTRA = 0x04; // badges, comments
+	
+	// AUTHORITY
 	private static final String AUTHORITY = "com.challengecomplete.android.models.goals";
-
+	
+	// PATH
 	private static final String BASE_PATH = "goals";
 	private static final String CURRENT_WITH_BADGES_PATH = "current_goals_with_badges";
+	private static final String GOALS_WITH_EXTRA_PATH = "goals_with_extra";
 	
+	// CONTENT URI
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/" + BASE_PATH);
 	
 	public static final Uri CONTENT_URI_CURRENT_WITH_BADGES = Uri.parse("content://" + AUTHORITY
 			+ "/" + CURRENT_WITH_BADGES_PATH);
 
+	public static final Uri CONTENT_URI_WITH_EXTRA = Uri.parse("content://" + AUTHORITY
+			+ "/" + GOALS_WITH_EXTRA_PATH);
+			
+	// CONTENT TYPE
 	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
 			+ "/goals";
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
 			+ "/goals";
 
+	// URI MATCHER
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	static {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH, GOALS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", GOAL);
 		sURIMatcher.addURI(AUTHORITY, CURRENT_WITH_BADGES_PATH, CURRENT_GOALS_WITH_BADGES);
+		sURIMatcher.addURI(AUTHORITY, GOALS_WITH_EXTRA_PATH + "/#", GOAL_WITH_EXTRA);
 	}
 	
 	@Override
@@ -92,6 +103,17 @@ public class GoalContentProvider extends ContentProvider {
 	    			+ " on (" + GoalTable.NAME + "." + GoalTable.COLUMN_BADGE + "="
 	    			+ BadgeTable.NAME + "." + BadgeTable.COLUMN_NAME + ")"
 	    			+ " where " + GoalTable.NAME + "." + GoalTable.COLUMN_IS_CURRENT + "=1", null);
+	    	break;
+	    case GOAL_WITH_EXTRA:
+	    	String[] args = {uri.getLastPathSegment()};
+	    	
+	    	cursor = dbHelper.getReadableDatabase().rawQuery(
+	    			"SELECT " + GoalTable.NAME + ".*, " + BadgeTable.NAME + "." + BadgeTable.COLUMN_SVG
+	    			+ " from " + GoalTable.NAME + " LEFT OUTER JOIN " + BadgeTable.NAME
+	    			+ " on (" + GoalTable.NAME + "." + GoalTable.COLUMN_BADGE + "="
+	    			+ BadgeTable.NAME + "." + BadgeTable.COLUMN_NAME + ")"
+	    			+ " where " + GoalTable.NAME + "." + GoalTable.COLUMN_ID + "=?"
+	    			+ " limit 1", args);
 	    	break;
 	    default:
 	    	throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -209,6 +231,9 @@ public class GoalContentProvider extends ContentProvider {
 	    	break;
 	    case CURRENT_GOALS_WITH_BADGES:
 	    	available = GoalTable.allColumnsWithBadge;
+	    	break;
+	    case GOAL_WITH_EXTRA:
+	    	available = GoalTable.allColumnsWithExtra;
 	    	break;
 	    default:
 	    	throw new IllegalArgumentException("Unknown URI: " + uri);

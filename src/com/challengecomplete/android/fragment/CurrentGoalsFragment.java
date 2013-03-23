@@ -9,15 +9,17 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.challengecomplete.android.R;
+import com.challengecomplete.android.activity.MainActivity;
 import com.challengecomplete.android.adapter.CurrentGoalsAdapter;
 import com.challengecomplete.android.models.goals.GoalContentProvider;
 import com.challengecomplete.android.models.goals.GoalTable;
@@ -94,10 +96,10 @@ public class CurrentGoalsFragment extends ListFragment implements LoaderCallback
 	}
 	
 	
-//	@Override
-//	public void onListItemClick(ListView l, View v, int position, long id) {
-//        Toast.makeText(v.getContext(), id + " selected", Toast.LENGTH_SHORT).show();
-//    }
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		((MainActivity) getActivity()).switchFragment(MainActivity.FRAGMENT_GOAL, (int) id);
+    }
 	
 	// Currently not in use
 	/**

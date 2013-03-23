@@ -1,7 +1,11 @@
 package com.challengecomplete.android.models.goals;
 
+import com.challengecomplete.android.models.badges.BadgeTable;
+
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 
 
@@ -19,12 +23,18 @@ public class Goal {
 	private String bg_color;
 	private int owner_id;
 	private int parent_id;
+	private String svg;
 	
 	// constructor not complete
 	// TODO
+	public Goal(int id){
+		this.id = id;
+	}
+	
 	// need default values
-	public Goal(String name, String description, int points, long created_at, long updated_at,
+	public Goal(int id, String name, String description, int points, long created_at, long updated_at,
 			String deadline, boolean has_deadline, String badge, String fg_color, String bg_color, int owner_id, int parent_id){
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.points = points;
@@ -74,6 +84,28 @@ public class Goal {
 		context.getContentResolver().delete(deleteUri, null, null);
 	}
 	
+	public void populate(Context context){
+		Uri uri = ContentUris.withAppendedId(GoalContentProvider.CONTENT_URI_WITH_EXTRA, this.id);
+		String[] projection = GoalTable.allColumnsWithExtra;
+		Cursor c = context.getContentResolver().query(uri, projection, null, null, null);
+		
+		c.moveToFirst();
+		
+		this.name = c.getString(1);
+		this.description = c.getString(2);
+		this.points = c.getInt(3);
+		this.created_at = c.getLong(4);
+		this.updated_at = c.getLong(5);
+		this.deadline = c.getString(6);
+		this.has_deadline = c.getInt(7) == 1;
+		this.badge = c.getString(8);
+		this.fg_color = c.getString(9);
+		this.bg_color = c.getString(10);
+		this.owner_id = c.getInt(11);
+		this.parent_id = c.getInt(12);
+		
+		this.svg = c.getString(14);
+	}
 	
 //	public Task populateFromCursor(Cursor c){
 //		Task task = new Task();
@@ -194,5 +226,13 @@ public class Goal {
 
 	public void setParent_id(int parent_id) {
 		this.parent_id = parent_id;
+	}
+
+	public String getSvg() {
+		return svg;
+	}
+
+	public void setSvg(String svg) {
+		this.svg = svg;
 	}	
 }

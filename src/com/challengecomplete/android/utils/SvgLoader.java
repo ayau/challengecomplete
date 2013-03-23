@@ -116,6 +116,5 @@ public class SvgLoader {
 	    	adapter.notifyDataSetChanged();
 		}
 	}
-	
     
 }

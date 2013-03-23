@@ -56,6 +56,24 @@ public class GoalTable {
 		BadgeTable.COLUMN_SVG	// 14
 	};
 	
+	public final static String[] allColumnsWithExtra = {
+		COLUMN_ID,				// 0
+		COLUMN_NAME,			// 1
+		COLUMN_DESCRIPTION,		// 2
+		COLUMN_POINTS,			// 3
+		COLUMN_CREATED_AT,		// 4
+		COLUMN_UPDATED_AT,		// 5
+		COLUMN_DEADLINE,		// 6
+		COLUMN_HAS_DEADLINE,	// 7
+		COLUMN_BADGE,			// 8
+		COLUMN_FG_COLOR,		// 9
+		COLUMN_BG_COLOR,		// 10
+		COLUMN_OWNER_ID,		// 11
+		COLUMN_PARENT_ID,		// 12
+		COLUMN_IS_CURRENT,		// 13
+		BadgeTable.COLUMN_SVG	// 14
+	};
+	
 	// Database creation sql statement
 	  private static final String DATABASE_CREATE = "create table "
 		  + NAME + "(" + 

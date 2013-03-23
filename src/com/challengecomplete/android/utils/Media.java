@@ -1,5 +1,12 @@
 package com.challengecomplete.android.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import com.challengecomplete.android.R;
+import com.larvalabs.svgandroid.SVG;
+import com.larvalabs.svgandroid.SVGParser;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -57,7 +64,6 @@ public class Media {
 	    
 	    final Rect rect = new Rect(margin, margin, width - margin, width - margin);
 	    final Rect iRect = new Rect(margin + padding, margin + padding, width - margin - padding, width - margin - padding);
-//	    final Rect pRect = new Rect(badgeMargin, badgeMargin, width - badgeMargin, width - badgeMargin);
 	    
 	    final RectF iRectF = new RectF(iRect);
 	    final RectF rectF = new RectF(rect);
@@ -68,28 +74,7 @@ public class Media {
 	    paint.setAntiAlias(true);
 	    
 	    // svg dimensions
-	    int svgWidth = pictureDrawable.getPicture().getWidth();
-	    int svgHeight = pictureDrawable.getPicture().getHeight();
-	    int xOffset = 0;
-	    int yOffset = 0;
-	    
-	    int svgMaxWidth = width - badgeMargin*2;
-	    if (svgWidth > svgHeight){
-	    	float ratio = ((float) svgHeight)/svgWidth;
-	    	svgWidth = svgMaxWidth;
-	    	svgHeight = (int) (svgMaxWidth*ratio);
-	    	yOffset = (svgWidth - svgHeight)/2;
-	    } else {
-	    	float ratio = ((float) svgWidth)/svgHeight;
-	    	svgHeight = svgMaxWidth;
-	    	svgWidth = (int) (svgMaxWidth*ratio);
-	    	xOffset = (svgHeight - svgWidth)/2;
-	    }
-	    
-	    Rect svgRect = new Rect(xOffset + badgeMargin,
-	    		yOffset + badgeMargin,
-	    		xOffset + svgWidth + badgeMargin,
-	    		yOffset + svgHeight + badgeMargin);   
+	    Rect svgRect = getSvgRect(pictureDrawable, width, badgeMargin);   
 	    
 	    // draw border
 	    paint.setColor(Color.WHITE);
@@ -103,6 +88,89 @@ public class Media {
 	    canvas.drawPicture(pictureDrawable.getPicture(), svgRect);
 	    
 	    return output;
+	}
+	
+	// temporary solution. Should put in async task
+	public static Bitmap tempProcessSvg(Context context, String svgString, String fgColor, String bgColor){
+		svgString = svgString.replaceAll("fill=\"#000000\"", "");
+    	svgString = svgString.replaceAll("<polygon", "<polygon fill=\"#" + fgColor + "\"");
+    	svgString = svgString.replaceAll("<path", "<path fill=\"#" + fgColor + "\"");
+    	svgString = svgString.replaceAll("<rect", "<rect fill=\"#" + fgColor + "\"");
+    	
+    	InputStream is = new ByteArrayInputStream(svgString.getBytes());
+		SVG svg = SVGParser.getSVGFromInputStream(is);
+		
+		return getBadgeCoverBitmap(context, svg.createPictureDrawable(), bgColor);
+	}
+	
+	public static Bitmap getBadgeCoverBitmap(Context context, PictureDrawable pictureDrawable, String colorString){
+		Bitmap output = Bitmap.createBitmap((int) pxFromDp(context, 120f), (int) pxFromDp(context, 120f), Config.ARGB_8888);
+	    Canvas canvas = new Canvas(output);
+	    
+	    // Another way? getResources?
+	    int width = (int) pxFromDp(context, 120);
+	    int margin = (int) pxFromDp(context, 8);
+	    int outerWidth = (int) pxFromDp(context, 10);
+	    int innerMargin = (int) pxFromDp(context, 6);
+	    int badgeMargin = (int) pxFromDp(context, 18);
+	    int badgeTotalMargin = outerWidth/2 + innerMargin + badgeMargin;
+	    
+	    final float roundPx = width - margin* 2;
+	    final float iRoundPx = width - (margin + outerWidth + innerMargin)*2;
+	    
+	    final Rect iRect = new Rect(margin + outerWidth/2 + innerMargin, margin + outerWidth/2 + innerMargin,
+	    		width - margin - outerWidth/2 - innerMargin, width - margin - outerWidth/2 - innerMargin);
+	    
+	    final RectF iRectF = new RectF(iRect);
+	    
+	    final Rect rect = new Rect(margin, margin, width - margin, width - margin);
+	    final RectF rectF = new RectF(rect);
+	    
+	    
+	    Paint paint = new Paint();
+	    paint.setAntiAlias(true);
+	    paint.setColor(Color.parseColor("#" + colorString));
+
+	    final int color = Color.argb(200, 0, 0, 0);
+	    paint.setShadowLayer(2, 0, 1, color);
+	    
+	    canvas.drawRoundRect(iRectF, iRoundPx, iRoundPx, paint);	    
+	    
+	    paint.setStyle(Paint.Style.STROKE);
+	    paint.setStrokeWidth(outerWidth);
+	    
+	    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+	    
+	    Rect svgRect = getSvgRect(pictureDrawable, width, badgeTotalMargin);
+
+	    canvas.drawPicture(pictureDrawable.getPicture(), svgRect);
+	    
+	    return output;
+	}
+	
+	private static Rect getSvgRect(PictureDrawable pictureDrawable, int width, int margin){
+		int svgWidth = pictureDrawable.getPicture().getWidth();
+	    int svgHeight = pictureDrawable.getPicture().getHeight();
+	    int xOffset = 0;
+	    int yOffset = 0;
+	    
+	    int svgMaxWidth = width - margin*2;
+	    if (svgWidth > svgHeight){
+	    	float ratio = ((float) svgHeight)/svgWidth;
+	    	svgWidth = svgMaxWidth;
+	    	svgHeight = (int) (svgMaxWidth*ratio);
+	    	yOffset = (svgWidth - svgHeight)/2;
+	    } else {
+	    	float ratio = ((float) svgWidth)/svgHeight;
+	    	svgHeight = svgMaxWidth;
+	    	svgWidth = (int) (svgMaxWidth*ratio);
+	    	xOffset = (svgHeight - svgWidth)/2;
+	    }
+	    
+	    return new Rect(xOffset + margin,
+	    		yOffset + margin,
+	    		xOffset + svgWidth + margin,
+	    		yOffset + svgHeight + margin);
 	}
 
 	

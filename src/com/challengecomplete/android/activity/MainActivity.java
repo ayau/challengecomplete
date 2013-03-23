@@ -42,6 +42,7 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
 	private int currentFragment;
 	public static final int FRAGMENT_CURRENTGOALS = 1;
 	public static final int FRAGMENT_BUCKETGOALS = 2;
+	public static final int FRAGMENT_GOAL = 3;
 	
 	private ScrollView mScrollView;
 	private SideFragment mSideFragment;
@@ -59,8 +60,8 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
         mScrollView = (ScrollView) findViewById(R.id.scrollview);
         
         FrameLayout fl = (FrameLayout) findViewById(R.id.fragment_container);
-        GoalFragment mFragment = new GoalFragment();
-//        CurrentGoalsFragment mFragment = new CurrentGoalsFragment();
+
+        CurrentGoalsFragment mFragment = new CurrentGoalsFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(fl.getId(), mFragment);
         currentFragment = FRAGMENT_CURRENTGOALS;
@@ -154,6 +155,11 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     
     // Switching the fragment container view to another fragment
     public void switchFragment(int fragmentId){
+    	switchFragment(fragmentId, 0);
+    }
+    
+    // Id for certain fragments such as FRAGMENT_GOAL
+    public void switchFragment(int fragmentId, int id){
     	if (currentFragment == fragmentId) {
     		mScrollView.close();
     		return;
@@ -170,12 +176,18 @@ public class MainActivity extends FragmentActivity implements ServiceReceiver.Re
     		case FRAGMENT_BUCKETGOALS:
     			mFragment = new MainFragment();
     			break;
+    		case FRAGMENT_GOAL:
+    			if (id == 0) return;
+    			mFragment = new GoalFragment(id);
+    			currentFragment = fragmentId;
+		    	ft.replace(fl.getId(), mFragment);
+		    	ft.commit();
+		    	return;
     		default:
     			return;
     	}
     	
     	mScrollView.scrollOut(getFragmentSwitchRunnable(ft, mFragment, fl, fragmentId));
-
     }
     
     // Callback for scrollOut
