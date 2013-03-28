@@ -173,6 +173,50 @@ public class Media {
 	    		yOffset + svgHeight + margin);
 	}
 
+	public static Bitmap getSidePanelBitmap(Context context, int color){
+		int widthDp = 46;
+		
+		Bitmap output = Bitmap.createBitmap((int) pxFromDp(context, widthDp), (int) pxFromDp(context, widthDp), Config.ARGB_8888);
+	    Canvas canvas = new Canvas(output);
+	    
+	    int width = (int) pxFromDp(context, widthDp);
+	    int margin = (int) pxFromDp(context, 5);
+	    int padding = (int) pxFromDp(context, 2);
+	    
+	    final Paint paint = new Paint();
+	    
+	    final Rect rect = new Rect(margin, margin, width - margin, width - margin);
+	    final Rect iRect = new Rect(margin + padding, margin + padding, width - margin - padding, width - margin - padding);
+	    
+	    final RectF iRectF = new RectF(iRect);
+	    final RectF rectF = new RectF(rect);
+	    
+	    final float iRoundPx = width - margin*2 - padding*2;
+	    final float roundPx = width - margin* 2;
+
+	    paint.setAntiAlias(true); 
+	    
+	    // draw border
+	    paint.setColor(Color.WHITE);
+	    final int shadowColor = Color.argb(85, 0, 0, 0);
+	    paint.setShadowLayer(3, 0, 0, shadowColor);
+	    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+	    paint.setShadowLayer(0, 0, 0, Color.BLACK);
+	    
+	    paint.setColor(color);
+	    canvas.drawRoundRect(iRectF, iRoundPx, iRoundPx, paint);
+	    
+	    paint.setColor(Color.WHITE);
+	    paint.setTextSize(25);
+	    paint.setShadowLayer(2, 0, 2, shadowColor);
+	    String text = "13";
+	    int textWidth = (int) paint.measureText(text);
+	    int y = width/2  + (int) paint.descent() * 7/4;
+	    canvas.drawText(text, (width - textWidth)/2, y, paint);
+	    
+	    return output;
+	}
+	
 	
 	private static float dpFromPx(Context context, float px) {
 	    return px / context.getResources().getDisplayMetrics().density;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -57,11 +58,11 @@ public class SideFragment extends ListFragment{
 		
 		ArrayList<MenuItem> menu = new ArrayList<MenuItem>();
 
-		MenuItem new_goal = new MenuItem("New Goal", 0);
-		MenuItem current = new MenuItem("Current Goals", MainActivity.FRAGMENT_CURRENTGOALS);
-		MenuItem bucket = new MenuItem("In my Bucket", MainActivity.FRAGMENT_BUCKETGOALS);
-		MenuItem achievements = new MenuItem("Achievements", 0);
-		MenuItem notifications = new MenuItem("Notifications", 0);
+		MenuItem new_goal = new MenuItem("New Goal", 0, -1);
+		MenuItem current = new MenuItem("Current Goals", MainActivity.FRAGMENT_CURRENTGOALS, 13);
+		MenuItem bucket = new MenuItem("In my Bucket", MainActivity.FRAGMENT_BUCKETGOALS, 10);
+		MenuItem achievements = new MenuItem("Achievements", 0, 0);
+		MenuItem notifications = new MenuItem("Notifications", 0, 0);
 		
 		menu.add(new_goal);
 		menu.add(current);
@@ -143,18 +144,25 @@ public class SideFragment extends ListFragment{
 		
 		@Override
 		public View getView(int pos, View v, ViewGroup parent){
-			TextView title;
+			MenuHolder holder;
 			
 			if(v == null){
 				v = inflater.inflate(resId, parent, false);
-				title = (TextView) v.findViewById(R.id.menu_title);
-				v.setTag(title);
+				holder = new MenuHolder();
+				holder.title = (TextView) v.findViewById(R.id.menu_title);
+				holder.icon = (ImageView) v.findViewById(R.id.menu_icon);
+				v.setTag(holder);
 			}else{
-				title = (TextView) v.getTag();
+				holder = (MenuHolder) v.getTag();
 			}
+			
+			TextView title = holder.title;
+			ImageView icon = holder.icon;
 			
 			MenuItem item = getItem(pos);
 			title.setText(item.title);
+			Bitmap bitmap = Media.getSidePanelBitmap(context, Color.parseColor("#AB4FE8"));
+			icon.setImageBitmap(bitmap);
 			
 			if (selectedFragmentId == item.id){
 				v.setBackgroundColor(getResources().getColor(R.color.side_item_selected));
@@ -170,11 +178,18 @@ public class SideFragment extends ListFragment{
 	private class MenuItem {
 		int id; // Fragment Id
 		String title;
+		int count;
 		
-		public MenuItem(String title, int id){
+		public MenuItem(String title, int id, int count){
 			this.title = title;
 			this.id = id;
+			this.count = count;
 		}
+	}
+	
+	private class MenuHolder {
+		ImageView icon;
+		TextView title;
 	}
 	
 }
